@@ -1,8 +1,6 @@
 <template>
-  <Body class="bg-white dark:bg-gray-800" />
-  <div>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </div>
+  <Title>CocktailCalc</Title>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>

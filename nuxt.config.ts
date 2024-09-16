@@ -12,6 +12,8 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
   ],
 
   devServer: {
@@ -37,4 +39,14 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-09-16',
+
+  pinia: {
+    autoImports: ['defineStore'],
+  },
+
+  piniaPersistedstate: {
+    cookieOptions: {
+      maxAge: 60 * 60 * 24 * 30,
+    },
+  },
 });
