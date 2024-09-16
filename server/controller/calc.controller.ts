@@ -67,4 +67,15 @@ export class CalcController {
   async addEventRecipe(@Body() data: { event: string, recipe: string, amount: number }) {
     await this.appService.addEventRecipe(data.event, data.recipe, data.amount);
   }
+
+  @Delete("event/:name")
+  async deleteEvent(@Param("name") name: string) {
+    await this.appService.deleteEvent(name);
+  }
+
+  @Get("event/:name/list")
+  async getEventList(@Param("name") name: string): Promise<Object> {
+    const ingredients = await this.appService.getEventList(name);
+    return Object.fromEntries(ingredients);
+  }
 }

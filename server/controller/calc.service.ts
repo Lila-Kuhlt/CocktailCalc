@@ -157,4 +157,48 @@ export class CalcService {
       },
     });
   }
+
+  async deleteEvent(name: string) {
+    await this.prisma.event.delete({
+      where: {
+        name: name,
+      },
+    });
+  }
+
+  async getEventList(name: string): Promise<Map<string, number>> {
+    const event = await this.prisma.event.findUnique({
+      where: {
+        name: name,
+      },
+      include: {
+        recipes: {
+          select: {
+            amount: true,
+            recipe: {
+              select: {
+                ingredients: {
+                  select: {
+                    ingredientName: true,
+                    amount: true,
+                  }
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    let ingredients = new Map();
+    for (const cocktail of event?.recipes ?? []) {
+      const amount = cocktail.amount;
+      for (const ingredient of cocktail.recipe.ingredients) {
+        const ingredientName = ingredient.ingredientName;
+        const oldAmount = ingredients.get(ingredientName) ?? 0;
+        ingredients.set(ingredientName, oldAmount + amount * ingredient.amount);
+      }
+    }
+    console.log(ingredients);
+    return ingredients;
+  }
 }
