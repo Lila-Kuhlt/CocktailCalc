@@ -14,6 +14,7 @@ export default <Partial<Config>>{
   theme: {
     extend: {
       colors: {
+        primary: colors.indigo,
         secondary: colors.gray,
       },
     },
