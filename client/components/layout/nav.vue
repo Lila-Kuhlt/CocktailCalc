@@ -2,17 +2,20 @@
   <header>
     <nav>
       <div
-        class="bg-primary-400 dark:bg-primary-500 flex items-center justify-between p-5"
+        class="flex items-center justify-between bg-primary-400 p-5 dark:bg-primary-500"
       >
         <a class="text-3xl font-bold" href="/">CocktailCalc</a>
 
         <ul class="flex items-center space-x-5 text-lg font-semibold">
+          <li class="list-item"><a href="/">Events</a></li>
+          <li class="list-item"><a href="/recipes">Rezepte</a></li>
+          <li class="list-item"><a href="/ingredients">Zutaten</a></li>
           <li>
             <SettingTheme />
           </li>
         </ul>
       </div>
-      <div class="bg-primary-500 dark:bg-primary-400 h-1 px-1" />
+      <div class="h-1 bg-primary-500 px-1 dark:bg-primary-400" />
     </nav>
   </header>
 </template>
