@@ -8,13 +8,9 @@
     <div class="flex items-center justify-between px-4 py-5 sm:p-6">
       <h3 class="text-2xl font-semibold">{{ name }}</h3>
       <form ref="form" class="flex items-center space-x-2">
-        <input
+        <FormInputFloat
+          class="text-right"
           @focusout="update_price"
-          class="block w-16 rounded-md border-0 py-1.5 text-right text-lg text-secondary-900 shadow-sm ring-1 ring-inset ring-secondary-300 placeholder:text-secondary-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-          type="number"
-          step="0.01"
-          :min="0"
-          :max="1000000"
           :value="price.toFixed(2)"
         />
         <span>€</span>
