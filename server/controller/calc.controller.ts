@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CalcService, EventWithRecipes, RecipeWithIngredients } from '@/controller/calc.service';
 import { Ingredient, Recipe } from '@prisma/client';
 
-@Controller()
+@Controller('/')
 export class CalcController {
   constructor(private readonly appService: CalcService) {}
 

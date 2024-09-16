@@ -7,13 +7,12 @@
     </button>
     <div class="flex items-center justify-between px-4 py-5 sm:p-6">
       <h3 class="text-2xl font-semibold">{{ name }}</h3>
-      <form ref="form" class="flex items-center space-x-2">
-        <FormInputFloat
+      <form ref="form">
+        <FormInputPrice
           class="text-right"
           @focusout="update_price"
           :value="price.toFixed(2)"
         />
-        <span>€</span>
       </form>
     </div>
   </div>

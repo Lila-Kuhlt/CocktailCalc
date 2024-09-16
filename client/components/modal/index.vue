@@ -38,10 +38,7 @@
                 <button
                   type="button"
                   class="inline-flex w-full justify-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 sm:col-start-2"
-                  @click="
-                    $emit('submit');
-                    open = false;
-                  "
+                  @click="$emit('submit')"
                 >
                   Bestätigen
                 </button>
@@ -86,6 +83,9 @@ export default defineComponent({
   methods: {
     show() {
       this.open = true;
+    },
+    hide() {
+      this.open = false;
     },
   },
 });
