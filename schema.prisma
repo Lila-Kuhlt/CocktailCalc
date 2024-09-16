@@ -11,20 +11,19 @@ datasource db {
 }
 
 model Event {
-  id   Int    @id @default(autoincrement())
-  name String
+  name String @unique
 
   recipes RecipeAmount[]
 }
 
 model RecipeAmount {
-  id         Int    @id @default(autoincrement())
   amount     Float
-  eventId    Int?
+  eventName  String
   recipeName String
 
-  recipe Recipe @relation(fields: [recipeName], references: [name])
-  Event  Event? @relation(fields: [eventId], references: [id])
+  recipe Recipe @relation(fields: [recipeName], references: [name], onDelete: Cascade)
+  Event  Event? @relation(fields: [eventName], references: [name], onDelete: Cascade)
+  @@unique([eventName, recipeName])
 }
 
 model Recipe {
@@ -36,13 +35,13 @@ model Recipe {
 }
 
 model IngredientAmount {
-  id             Int     @id @default(autoincrement())
   amount         Float
-  recipeName     String?
+  recipeName     String
   ingredientName String
 
-  Recipe     Recipe?    @relation(fields: [recipeName], references: [name])
-  ingredient Ingredient @relation(fields: [ingredientName], references: [name])
+  Recipe     Recipe?    @relation(fields: [recipeName], references: [name], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientName], references: [name], onDelete: Cascade)
+  @@unique([recipeName, ingredientName])
 }
 
 model Ingredient {
