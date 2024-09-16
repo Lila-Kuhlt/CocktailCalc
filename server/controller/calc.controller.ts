@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { CalcService } from '@/controller/calc.service';
-import { Event, Ingredient, Recipe } from '@prisma/client';
+import { CalcService, EventWithRecipes, RecipeWithIngredients } from '@/controller/calc.service';
+import { Ingredient, Recipe } from '@prisma/client';
 
 @Controller()
 export class CalcController {
@@ -31,7 +31,7 @@ export class CalcController {
   // recipes
 
   @Get("recipes")
-  async getRecipes(): Promise<Recipe[]> {
+  async getRecipes(): Promise<RecipeWithIngredients[]> {
     return await this.appService.getRecipes();
   }
 
@@ -54,7 +54,7 @@ export class CalcController {
   // events
 
   @Get("events")
-  async getEvents(): Promise<Event[]> {
+  async getEvents(): Promise<EventWithRecipes[]> {
     return await this.appService.getEvents();
   }
 

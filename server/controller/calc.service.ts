@@ -1,6 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { Event, Ingredient, Recipe } from '@prisma/client';
+import { Ingredient } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
+
+export type RecipeWithIngredients = {
+  name: string;
+  description: string | null;
+  ingredients: IngredientWithAmount[];
+}
+
+type IngredientWithAmount = {
+  ingredientName: string;
+  amount: number;
+}
+
+export type EventWithRecipes = {
+  name: string;
+  recipes: RecipeWithAmount[];
+}
+
+type RecipeWithAmount = {
+  recipeName: string;
+  amount: number;
+}
 
 @Injectable()
 export class CalcService {
@@ -38,8 +59,17 @@ export class CalcService {
     });
   }
 
-  async getRecipes(): Promise<Recipe[]> {
-    return await this.prisma.recipe.findMany();
+  async getRecipes(): Promise<RecipeWithIngredients[]> {
+    return await this.prisma.recipe.findMany({
+      include: {
+        ingredients: {
+          select: {
+            ingredientName: true,
+            amount: true,
+          },
+        },
+      },
+    });
   }
 
   async addRecipe(name: string, description: string | null) {
@@ -84,8 +114,17 @@ export class CalcService {
     });
   }
 
-  async getEvents(): Promise<Event[]> {
-    return await this.prisma.event.findMany();
+  async getEvents(): Promise<EventWithRecipes[]> {
+    return await this.prisma.event.findMany({
+      include: {
+        recipes: {
+          select: {
+            recipeName: true,
+            amount: true,
+          }
+        },
+      },
+    });
   }
 
   async addEvent(name: string) {
