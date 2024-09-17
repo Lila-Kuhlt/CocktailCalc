@@ -4,7 +4,7 @@ import {
   EventWithRecipes,
   RecipeWithIngredients,
 } from '@/controller/calc.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation } from '@nestjs/swagger';
 import { Ingredient, Recipe } from '@prisma/client';
 
 @Controller('/')
@@ -13,7 +13,6 @@ export class CalcController {
 
   @Get()
   @ApiOperation({ summary: 'Hello world' })
-  @ApiResponse({ status: 200, description: 'Hello world' })
   getHello(): string {
     return this.appService.getHello();
   }
@@ -21,16 +20,19 @@ export class CalcController {
   // ingredients
 
   @Get('ingredients')
+  @ApiOperation({ summary: 'list of all ingredients' })
   async getIngredients(): Promise<Ingredient[]> {
     return await this.appService.getIngredients();
   }
 
   @Post('ingredient')
+  @ApiOperation({ summary: 'add or update ingredient' })
   async addIngredient(@Body() data: Ingredient) {
     await this.appService.addIngredient(data.name, data.price);
   }
 
   @Delete('ingredient/:name')
+  @ApiOperation({ summary: 'delete ingredient' })
   async deleteIngredient(@Param('name') name: string) {
     await this.appService.deleteIngredient(name);
   }
@@ -38,17 +40,20 @@ export class CalcController {
   // recipes
 
   @Get('recipes')
+  @ApiOperation({ summary: 'list of all recipes' })
   async getRecipes(): Promise<RecipeWithIngredients[]> {
     return await this.appService.getRecipes();
   }
 
   @Post('recipe')
+  @ApiOperation({ summary: 'add or update recipe' })
   async addRecipe(@Body() data: Recipe) {
     await this.appService.addRecipe(data.name, data.description);
   }
 
   @Post('recipe/ingredient')
-  async addRrecipeIngredient(
+  @ApiOperation({ summary: 'add ingredient to recipe' })
+  async addRecipeIngredient(
     @Body() data: { recipe: string; ingredient: string; amount: number },
   ) {
     await this.appService.addIngredientAmount(
@@ -59,6 +64,7 @@ export class CalcController {
   }
 
   @Delete('recipe/:name')
+  @ApiOperation({ summary: 'delete recipe' })
   async deleteRecipe(@Param('name') name: string) {
     console.log('deleting ', name);
     await this.appService.deleteRecipe(name);
@@ -67,16 +73,19 @@ export class CalcController {
   // events
 
   @Get('events')
+  @ApiOperation({ summary: 'list of all events' })
   async getEvents(): Promise<EventWithRecipes[]> {
     return await this.appService.getEvents();
   }
 
   @Post('event')
+  @ApiOperation({ summary: 'add or update event' })
   async addEvent(@Body() data: { name: string }) {
     await this.appService.addEvent(data.name);
   }
 
   @Post('event/recipe')
+  @ApiOperation({ summary: 'add recipe to event' })
   async addEventRecipe(
     @Body() data: { event: string; recipe: string; amount: number },
   ) {
@@ -84,13 +93,15 @@ export class CalcController {
   }
 
   @Delete('event/:name')
+  @ApiOperation({ summary: 'delete event' })
   async deleteEvent(@Param('name') name: string) {
     await this.appService.deleteEvent(name);
   }
 
   @Get('event/:name/list')
-  async getEventList(@Param('name') name: string): Promise<Object> {
-    const ingredients = await this.appService.getEventList(name);
-    return Object.fromEntries(ingredients);
+  @ApiOperation({ summary: 'buying list for event' })
+  async getEventList(@Param('name') name: string): Promise<{ ingredients: Object, price: number }> {
+    const list = await this.appService.getEventList(name);
+    return { ingredients: Object.fromEntries(list.ingredients), price: list.price };
   }
 }

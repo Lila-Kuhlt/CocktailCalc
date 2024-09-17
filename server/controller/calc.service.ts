@@ -170,7 +170,7 @@ export class CalcService {
     });
   }
 
-  async getEventList(name: string): Promise<Map<string, number>> {
+  async getEventList(name: string): Promise<{ ingredients: Map<string, number>, price: number }> {
     const event = await this.prisma.event.findUnique({
       where: {
         name: name,
@@ -185,6 +185,11 @@ export class CalcService {
                   select: {
                     ingredientName: true,
                     amount: true,
+                    ingredient: {
+                      select: {
+                        price: true,
+                      },
+                    },
                   },
                 },
               },
@@ -194,15 +199,18 @@ export class CalcService {
       },
     });
     let ingredients = new Map();
+    let price = 0.0;
     for (const cocktail of event?.recipes ?? []) {
       const amount = cocktail.amount;
       for (const ingredient of cocktail.recipe.ingredients) {
         const ingredientName = ingredient.ingredientName;
         const oldAmount = ingredients.get(ingredientName) ?? 0;
         ingredients.set(ingredientName, oldAmount + amount * ingredient.amount);
+        // prices are in €/l, but ingredient amounts are in cl
+        price += amount * ingredient.amount * ingredient.ingredient.price / 100;
       }
     }
     console.log(ingredients);
-    return ingredients;
+    return { ingredients, price };
   }
 }
