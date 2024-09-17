@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@/app.module';
-import helmet from 'helmet';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
+import helmet from 'helmet';
 
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule, {
@@ -23,6 +24,13 @@ export async function createApp(): Promise<INestApplication> {
       crossOriginEmbedderPolicy: true,
     }),
   );
+  const config = new DocumentBuilder()
+    .setTitle('CocktailCalc API')
+    .setDescription('The CocktailCalc API description')
+    .setVersion('1.0-alpha')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
   return app;
 }
 
