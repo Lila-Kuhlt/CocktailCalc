@@ -117,6 +117,17 @@ export class CalcService {
     });
   }
 
+  async deleteRecipeIngredient(recipe: string, ingredient: string) {
+    await this.prisma.ingredientAmount.delete({
+      where: {
+        recipeName_name: {
+          recipeName: recipe,
+          name: ingredient,
+        },
+      },
+    });
+  }
+
   async getEvents(): Promise<EventWithRecipes[]> {
     return this.prisma.event.findMany({
       include: {
@@ -165,6 +176,17 @@ export class CalcService {
     await this.prisma.event.delete({
       where: {
         name: name,
+      },
+    });
+  }
+
+  async deleteEventRecipe(event: string, recipe: string) {
+    await this.prisma.recipeAmount.delete({
+      where: {
+        eventName_name: {
+          eventName: event,
+          name: recipe,
+        },
       },
     });
   }

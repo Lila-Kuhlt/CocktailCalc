@@ -30,6 +30,13 @@ class RecipeIngredientDto {
   amount!: number;
 }
 
+class DeleteRecipeIngredientDto {
+  @ApiProperty()
+  recipe!: string;
+  @ApiProperty()
+  ingredient!: string;
+}
+
 class EventDto {
   @ApiProperty()
   name!: string;
@@ -42,6 +49,13 @@ class EventRecipeDto {
   recipe!: string;
   @ApiProperty()
   amount!: number;
+}
+
+class DeleteEventRecipeDto {
+  @ApiProperty()
+  event!: string;
+  @ApiProperty()
+  recipe!: string;
 }
 
 @Controller('/')
@@ -104,6 +118,12 @@ export class CalcController {
     await this.appService.deleteRecipe(name);
   }
 
+  @Delete('recipe/ingredient')
+  @ApiOperation({ summary: 'delete ingredient from recipe' })
+  async deleteRecipeIngredient(@Body() data: DeleteRecipeIngredientDto) {
+    await this.appService.deleteRecipeIngredient(data.recipe, data.ingredient);
+  }
+
   // events
 
   @Get('events')
@@ -128,6 +148,12 @@ export class CalcController {
   @ApiOperation({ summary: 'delete event' })
   async deleteEvent(@Param('name') name: string) {
     await this.appService.deleteEvent(name);
+  }
+
+  @Delete('event/recipe')
+  @ApiOperation({ summary: 'delete recipe from event' })
+  async deleteEventRecipe(@Body() data: DeleteEventRecipeDto) {
+    await this.appService.deleteEventRecipe(data.event, data.recipe);
   }
 
   @Get('event/:name/list')
