@@ -1,6 +1,6 @@
 <template>
   <Card @delete="delete_ingredient">
-    <div class="flex items-center justify-between space-x-2">
+    <div class="flex items-center justify-between gap-x-2">
       <CardTitle :title="name" />
       <form ref="form">
         <FormInputPrice

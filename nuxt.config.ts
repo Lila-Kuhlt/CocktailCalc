@@ -14,9 +14,8 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
+    '@nuxt/fonts',
   ],
-
-  css: ['@/public/fonts/fonts.css'],
 
   devServer: {
     port: process.env.PORT_FRONTEND,

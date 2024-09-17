@@ -1,5 +1,8 @@
 <template>
-  <h4 class="w-full truncate whitespace-nowrap text-lg" :title="title">
+  <h4
+    class="w-full truncate whitespace-nowrap text-lg font-medium"
+    :title="title"
+  >
     {{ title }}
   </h4>
 </template>

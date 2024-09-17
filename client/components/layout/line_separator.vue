@@ -1,13 +1,18 @@
 <template>
   <div class="relative w-full">
     <div class="absolute inset-0 flex w-full items-center" aria-hidden="true">
-      <div class="w-full border-t border-secondary-300" />
+      <div
+        class="w-full border-t border-secondary-300 dark:border-secondary-700"
+      />
     </div>
     <div
       v-if="title !== ''"
       class="relative flex justify-center text-sm font-medium leading-6"
     >
-      <span class="bg-white px-6 text-secondary-900">{{ title }}</span>
+      <span
+        class="bg-white px-6 text-secondary-900 dark:bg-secondary-900 dark:text-secondary-100"
+        >{{ title }}</span
+      >
     </div>
   </div>
 </template>

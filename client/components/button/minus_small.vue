@@ -1,6 +1,6 @@
 <template>
   <button>
-    <XCircleIcon class="w-5 fill-secondary-400" />
+    <XCircleIcon class="w-5 fill-secondary-400 dark:fill-secondary-600" />
   </button>
 </template>
 
