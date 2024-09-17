@@ -66,7 +66,6 @@ export class CalcController {
   @Delete('recipe/:name')
   @ApiOperation({ summary: 'delete recipe' })
   async deleteRecipe(@Param('name') name: string) {
-    console.log('deleting ', name);
     await this.appService.deleteRecipe(name);
   }
 
