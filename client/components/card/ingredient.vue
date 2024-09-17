@@ -5,11 +5,15 @@
     <button @click="delete_ingredient" class="absolute">
       <XCircleIcon class="w-5 fill-secondary-400" />
     </button>
-    <div class="flex items-center justify-between px-4 py-5 sm:p-6">
-      <h3 class="text-2xl font-semibold">{{ name }}</h3>
+    <div
+      class="w-min-16 flex items-center justify-between space-x-2 px-4 py-5 sm:p-6 sm:pr-8"
+    >
+      <h3 class="truncate text-2xl font-semibold" :title="name">
+        {{ name }}
+      </h3>
       <form ref="form">
         <FormInputPrice
-          class="text-right"
+          class="w-24 text-right"
           @focusout="update_price"
           :value="price.toFixed(2)"
         />

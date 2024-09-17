@@ -1,6 +1,6 @@
 <template>
   <LayoutSection>
-    <LayoutPageTitle>Events</LayoutPageTitle>
+    <LayoutPageTitle>Rezepte</LayoutPageTitle>
   </LayoutSection>
 </template>
 
