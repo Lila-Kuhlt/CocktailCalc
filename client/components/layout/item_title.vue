@@ -1,10 +1,7 @@
 <template>
-  <h3
-    class="truncate whitespace-nowrap text-2xl font-semibold text-secondary-800"
-    :title="title"
-  >
+  <h4 class="w-full truncate whitespace-nowrap text-lg" :title="title">
     {{ title }}
-  </h3>
+  </h4>
 </template>
 
 <script setup lang="ts">

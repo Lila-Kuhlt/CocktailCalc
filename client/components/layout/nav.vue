@@ -6,7 +6,7 @@
       >
         <a class="text-3xl font-bold" href="/">CocktailCalc</a>
 
-        <ul class="flex items-center space-x-5 text-lg font-semibold">
+        <ul class="flex items-center space-x-5 text-xl font-semibold">
           <li class="list-item"><a href="/">Events</a></li>
           <li class="list-item"><a href="/recipes">Rezepte</a></li>
           <li class="list-item"><a href="/ingredients">Zutaten</a></li>

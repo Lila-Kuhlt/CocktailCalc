@@ -20,8 +20,6 @@
 </template>
 
 <script lang="ts">
-import { call_ingredient_upsert } from '~/utils/api';
-
 export default defineComponent({
   emits: ['upserted_ingredient'],
   methods: {
