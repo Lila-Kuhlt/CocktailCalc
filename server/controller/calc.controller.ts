@@ -4,7 +4,7 @@ import {
   EventWithRecipes,
   RecipeWithIngredients,
 } from '@/controller/calc.service';
-import { ApiOperation, ApiProperty } from '@nestjs/swagger';
+import { ApiOperation, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Ingredient, Recipe } from '@prisma/client';
 
 class IngredientDto {
@@ -17,8 +17,8 @@ class IngredientDto {
 class RecipeDto {
   @ApiProperty()
   name!: string;
-  @ApiProperty()
-  description!: string;
+  @ApiPropertyOptional()
+  description?: string;
 }
 
 class RecipeIngredientDto {
@@ -85,7 +85,7 @@ export class CalcController {
   @Post('recipe')
   @ApiOperation({ summary: 'add or update recipe' })
   async addRecipe(@Body() data: RecipeDto) {
-    await this.appService.addRecipe(data.name, data.description);
+    await this.appService.addRecipe(data.name, data.description ?? "");
   }
 
   @Post('recipe/ingredient')
