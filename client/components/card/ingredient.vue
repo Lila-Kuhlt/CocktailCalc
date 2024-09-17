@@ -38,11 +38,15 @@ export default defineComponent({
     update_price(event: InputEvent) {
       if (!this.$refs.form.reportValidity()) return;
       const price = parseFloat((event.target as HTMLInputElement).value);
-      this.$emit('update', this.name, price);
+      call_ingredient_upsert(this.name, price).then(() => {
+        this.$emit('update', this.name, price);
+      });
     },
     delete_ingredient() {
       if (!confirm('Zutat wirklich löschen?')) return;
-      this.$emit('delete', this.name);
+      call_ingredient_delete(this.name).then(() => {
+        this.$emit('delete', this.name);
+      });
     },
   },
 });

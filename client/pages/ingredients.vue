@@ -13,17 +13,15 @@
       />
     </div>
   </section>
-  <ModalIngredient @added_ingredient="add_ingredient" ref="add_modal" />
+  <ModalIngredient @upserted_ingredient="upsert_ingredient" ref="add_modal" />
 </template>
 
 <script lang="ts">
-import { call_api, Method } from '~/util/api';
-
 export default defineComponent({
   setup() {
     const ingredients: Array<{ name: string; price: string }> = ref([]);
 
-    call_api(Method.GET, '/ingredients').then((data) => {
+    call_ingredient_get_many().then((data) => {
       ingredients.value = data;
     });
 
@@ -32,16 +30,21 @@ export default defineComponent({
     };
   },
   methods: {
-    add_ingredient(ingredient: { name: string; price: number }) {
-      this.ingredients.push(ingredient);
+    upsert_ingredient(name: string, price: number) {
+      const ingredient = this.find_ingredient(name);
+      if (ingredient) ingredient.price = price;
+      else this.ingredients.push({ name, price });
     },
     update_ingredient(name: string, price: number) {
-      const ingredient = this.ingredients.find((i) => i.name === name);
+      const ingredient = this.find_ingredient(name);
       if (!ingredient) return;
       ingredient.price = price;
     },
     delete_ingredient(name: string) {
       this.ingredients = this.ingredients.filter((i) => i.name !== name);
+    },
+    find_ingredient(name: string) {
+      return this.ingredients.find((i) => i.name === name);
     },
   },
 });
