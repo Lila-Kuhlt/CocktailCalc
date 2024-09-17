@@ -6,22 +6,22 @@ export type RecipeWithIngredients = {
   name: string;
   description: string | null;
   ingredients: IngredientWithAmount[];
-}
+};
 
 type IngredientWithAmount = {
   ingredientName: string;
   amount: number;
-}
+};
 
 export type EventWithRecipes = {
   name: string;
   recipes: RecipeWithAmount[];
-}
+};
 
 type RecipeWithAmount = {
   recipeName: string;
   amount: number;
-}
+};
 
 @Injectable()
 export class CalcService {
@@ -32,11 +32,11 @@ export class CalcService {
   }
 
   async getIngredients(): Promise<Ingredient[]> {
-    return await this.prisma.ingredient.findMany();
+    return this.prisma.ingredient.findMany();
   }
 
   async addIngredient(name: string, price: number) {
-    console.log(name, price)
+    console.log(name, price);
     await this.prisma.ingredient.upsert({
       where: {
         name: name,
@@ -60,7 +60,7 @@ export class CalcService {
   }
 
   async getRecipes(): Promise<RecipeWithIngredients[]> {
-    return await this.prisma.recipe.findMany({
+    return this.prisma.recipe.findMany({
       include: {
         ingredients: {
           select: {
@@ -87,7 +87,11 @@ export class CalcService {
     });
   }
 
-  async addIngredientAmount(recipe: string, ingredient: string, amount: number) {
+  async addIngredientAmount(
+    recipe: string,
+    ingredient: string,
+    amount: number,
+  ) {
     await this.prisma.ingredientAmount.upsert({
       where: {
         recipeName_ingredientName: {
@@ -115,13 +119,13 @@ export class CalcService {
   }
 
   async getEvents(): Promise<EventWithRecipes[]> {
-    return await this.prisma.event.findMany({
+    return this.prisma.event.findMany({
       include: {
         recipes: {
           select: {
             recipeName: true,
             amount: true,
-          }
+          },
         },
       },
     });
@@ -181,7 +185,7 @@ export class CalcService {
                   select: {
                     ingredientName: true,
                     amount: true,
-                  }
+                  },
                 },
               },
             },
