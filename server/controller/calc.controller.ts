@@ -4,6 +4,7 @@ import {
   EventWithRecipes,
   RecipeWithIngredients,
 } from '@/controller/calc.service';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Ingredient, Recipe } from '@prisma/client';
 
 @Controller('/')
@@ -11,6 +12,8 @@ export class CalcController {
   constructor(private readonly appService: CalcService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Hello world' })
+  @ApiResponse({ status: 200, description: 'Hello world' })
   getHello(): string {
     return this.appService.getHello();
   }
