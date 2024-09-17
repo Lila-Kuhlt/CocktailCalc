@@ -1,8 +1,10 @@
 <template>
-  <section class="justify-start space-y-4 p-6">
-    <h1 class="text-3xl font-bold">Zutaten</h1>
+  <LayoutSection class="space-y-4 p-6">
+    <LayoutPageTitle class="text-3xl font-bold">Zutaten</LayoutPageTitle>
     <Bigbutton @click="$refs.add_modal.show()">Neue Zutat</Bigbutton>
-    <div class="grid grid-cols-4 gap-6">
+    <div
+      class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+    >
       <CardIngredient
         v-for="ingredient in ingredients"
         :key="ingredient.name"
@@ -12,7 +14,7 @@
         @delete="delete_ingredient"
       />
     </div>
-  </section>
+  </LayoutSection>
   <ModalIngredient @upserted_ingredient="upsert_ingredient" ref="add_modal" />
 </template>
 
