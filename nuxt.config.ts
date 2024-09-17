@@ -16,6 +16,8 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt',
   ],
 
+  css: ['@/public/fonts/fonts.css'],
+
   devServer: {
     port: process.env.PORT_FRONTEND,
   },

@@ -10,6 +10,33 @@ export async function call_api(method: Method, path: string, data?: any) {
   return call_url(method, `${base_url}${path}`, data);
 }
 
+export async function call_recipe_get_many(): Promise<any> {
+  return call_api(Method.GET, '/recipes');
+}
+
+export async function call_recipe_upsert(name: string): Promise<any> {
+  return call_api(Method.POST, '/recipe', { name });
+}
+
+export async function call_recipe_delete(name: string): Promise<any> {
+  return call_api(Method.DELETE, `/recipe`, { name });
+}
+
+export async function call_recipe_upsert_ingredient(upsert_ingredient: {
+  recipe: string;
+  ingredient: string;
+  amount: number;
+}): Promise<any> {
+  return call_api(Method.POST, '/recipe/ingredient', upsert_ingredient);
+}
+
+export async function call_recipe_delete_ingredient(recipe_ingredient: {
+  recipe: string;
+  ingredient: string;
+}): Promise<any> {
+  return call_api(Method.DELETE, `/recipe/ingredient`, recipe_ingredient);
+}
+
 export async function call_ingredient_get_many(): Promise<any> {
   return call_api(Method.GET, '/ingredients');
 }
@@ -22,7 +49,7 @@ export async function call_ingredient_upsert(
 }
 
 export async function call_ingredient_delete(name: string): Promise<any> {
-  return call_api(Method.DELETE, `/ingredient/${name}`);
+  return call_api(Method.DELETE, `/ingredient`, { name });
 }
 
 async function call_url(
