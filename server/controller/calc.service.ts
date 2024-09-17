@@ -71,7 +71,7 @@ export class CalcService {
     });
   }
 
-  async addRecipe(name: string, description: string | null) {
+  async addRecipe(name: string, description: string) {
     await this.prisma.recipe.upsert({
       where: {
         name: name,
