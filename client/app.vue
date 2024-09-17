@@ -25,8 +25,9 @@
   />
   <Link rel="icon" href="/favicon/favicon.ico" />
   <Link rel="manifest" href="/site.webmanifest" />
+  <Link rel="stylesheet" href="/fonts/fonts.css" />
 
-  <NuxtLayout>
+  <NuxtLayout class="font-poppins">
     <NuxtPage />
   </NuxtLayout>
 </template>

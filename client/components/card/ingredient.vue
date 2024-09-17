@@ -1,16 +1,7 @@
 <template>
-  <div
-    class="overflow-hidden rounded-lg shadow outline outline-secondary-200 dark:outline-secondary-700"
-  >
-    <button @click="delete_ingredient" class="absolute">
-      <XCircleIcon class="w-5 fill-secondary-400" />
-    </button>
-    <div
-      class="w-min-16 flex items-center justify-between space-x-2 px-4 py-5 sm:p-6 sm:pr-8"
-    >
-      <h3 class="truncate text-2xl font-semibold" :title="name">
-        {{ name }}
-      </h3>
+  <Card @delete="delete_ingredient">
+    <div class="flex items-center justify-between space-x-2">
+      <CardTitle :title="name" />
       <form ref="form">
         <FormInputPrice
           class="w-24 text-right"
@@ -19,7 +10,7 @@
         />
       </form>
     </div>
-  </div>
+  </Card>
 </template>
 
 <script lang="ts">
@@ -47,7 +38,6 @@ export default defineComponent({
       });
     },
     delete_ingredient() {
-      if (!confirm('Zutat wirklich löschen?')) return;
       call_ingredient_delete(this.name).then(() => {
         this.$emit('delete', this.name);
       });
