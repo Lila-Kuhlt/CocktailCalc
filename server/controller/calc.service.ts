@@ -9,7 +9,7 @@ export type RecipeWithIngredients = {
 };
 
 type IngredientWithAmount = {
-  ingredientName: string;
+  name: string;
   amount: number;
 };
 
@@ -19,7 +19,7 @@ export type EventWithRecipes = {
 };
 
 type RecipeWithAmount = {
-  recipeName: string;
+  name: string;
   amount: number;
 };
 
@@ -63,7 +63,7 @@ export class CalcService {
       include: {
         ingredients: {
           select: {
-            ingredientName: true,
+            name: true,
             amount: true,
           },
         },
@@ -93,9 +93,9 @@ export class CalcService {
   ) {
     await this.prisma.ingredientAmount.upsert({
       where: {
-        recipeName_ingredientName: {
+        recipeName_name: {
           recipeName: recipe,
-          ingredientName: ingredient,
+          name: ingredient,
         },
       },
       update: {
@@ -103,7 +103,7 @@ export class CalcService {
       },
       create: {
         recipeName: recipe,
-        ingredientName: ingredient,
+        name: ingredient,
         amount: amount,
       },
     });
@@ -122,7 +122,7 @@ export class CalcService {
       include: {
         recipes: {
           select: {
-            recipeName: true,
+            name: true,
             amount: true,
           },
         },
@@ -145,9 +145,9 @@ export class CalcService {
   async addEventRecipe(event: string, recipe: string, amount: number) {
     await this.prisma.recipeAmount.upsert({
       where: {
-        eventName_recipeName: {
+        eventName_name: {
           eventName: event,
-          recipeName: recipe,
+          name: recipe,
         },
       },
       update: {
@@ -155,7 +155,7 @@ export class CalcService {
       },
       create: {
         eventName: event,
-        recipeName: recipe,
+        name: recipe,
         amount: amount,
       },
     });
@@ -182,7 +182,7 @@ export class CalcService {
               select: {
                 ingredients: {
                   select: {
-                    ingredientName: true,
+                    name: true,
                     amount: true,
                     ingredient: {
                       select: {
@@ -202,10 +202,9 @@ export class CalcService {
     for (const cocktail of event?.recipes ?? []) {
       const amount = cocktail.amount;
       for (const ingredient of cocktail.recipe.ingredients) {
-        const ingredientName = ingredient.ingredientName;
-        const oldAmount = ingredients.get(ingredientName) ?? 0;
+        const oldAmount = ingredients.get(ingredient.name) ?? 0;
         const ingredientAmountInLiters = amount * ingredient.amount / 100;
-        ingredients.set(ingredientName, oldAmount + ingredientAmountInLiters);
+        ingredients.set(ingredient.name, oldAmount + ingredientAmountInLiters);
         // prices are in €/l, but ingredient amounts are in cl
         price += ingredientAmountInLiters * ingredient.ingredient.price;
       }
