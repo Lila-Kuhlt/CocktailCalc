@@ -1,8 +1,8 @@
 <template>
   <Card @delete="delete_recipe">
-    <div class="flex flex-col items-center justify-between gap-y-2">
+    <div class="flex h-full flex-col items-center justify-between gap-y-2">
       <CardTitle :title="name" />
-      <ul class="mt-2 flex w-full flex-col justify-between gap-y-1">
+      <ul class="mt-2 flex w-full flex-grow flex-col justify-between gap-y-1">
         <li v-for="ingredient in ingredients" :key="ingredient.name">
           <form class="flex items-center gap-x-3">
             <LayoutItemTitle :title="ingredient.name" />
@@ -23,8 +23,8 @@
             />
           </form>
         </li>
-        <LayoutLineSeparator class="my-2" title="Zutat hinzufügen" />
-        <li>
+        <li class="mt-auto">
+          <LayoutLineSeparator class="my-3" title="Zutat hinzufügen" />
           <form @submit.prevent="add_ingredient" class="flex gap-x-3">
             <SelectItems
               :options="ingredients_many"
