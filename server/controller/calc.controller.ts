@@ -4,8 +4,45 @@ import {
   EventWithRecipes,
   RecipeWithIngredients,
 } from '@/controller/calc.service';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiProperty } from '@nestjs/swagger';
 import { Ingredient, Recipe } from '@prisma/client';
+
+class IngredientDto {
+  @ApiProperty()
+  name!: string;
+  @ApiProperty()
+  price!: number;
+}
+
+class RecipeDto {
+  @ApiProperty()
+  name!: string;
+  @ApiProperty()
+  description!: string;
+}
+
+class RecipeIngredientDto {
+  @ApiProperty()
+  recipe!: string;
+  @ApiProperty()
+  ingredient!: string;
+  @ApiProperty()
+  amount!: number;
+}
+
+class EventDto {
+  @ApiProperty()
+  name!: string;
+}
+
+class EventRecipeDto {
+  @ApiProperty()
+  event!: string;
+  @ApiProperty()
+  recipe!: string;
+  @ApiProperty()
+  amount!: number;
+}
 
 @Controller('/')
 export class CalcController {
@@ -27,7 +64,7 @@ export class CalcController {
 
   @Post('ingredient')
   @ApiOperation({ summary: 'add or update ingredient' })
-  async addIngredient(@Body() data: Ingredient) {
+  async addIngredient(@Body() data: IngredientDto) {
     await this.appService.addIngredient(data.name, data.price);
   }
 
@@ -47,15 +84,13 @@ export class CalcController {
 
   @Post('recipe')
   @ApiOperation({ summary: 'add or update recipe' })
-  async addRecipe(@Body() data: Recipe) {
+  async addRecipe(@Body() data: RecipeDto) {
     await this.appService.addRecipe(data.name, data.description);
   }
 
   @Post('recipe/ingredient')
   @ApiOperation({ summary: 'add ingredient to recipe' })
-  async addRecipeIngredient(
-    @Body() data: { recipe: string; ingredient: string; amount: number },
-  ) {
+  async addRecipeIngredient(@Body() data: RecipeIngredientDto) {
     await this.appService.addIngredientAmount(
       data.recipe,
       data.ingredient,
@@ -79,15 +114,13 @@ export class CalcController {
 
   @Post('event')
   @ApiOperation({ summary: 'add or update event' })
-  async addEvent(@Body() data: { name: string }) {
+  async addEvent(@Body() data: EventDto) {
     await this.appService.addEvent(data.name);
   }
 
   @Post('event/recipe')
   @ApiOperation({ summary: 'add recipe to event' })
-  async addEventRecipe(
-    @Body() data: { event: string; recipe: string; amount: number },
-  ) {
+  async addEventRecipe(@Body() data: EventRecipeDto) {
     await this.appService.addEventRecipe(data.event, data.recipe, data.amount);
   }
 
