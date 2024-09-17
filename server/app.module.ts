@@ -1,7 +1,7 @@
-import {Logger, Module} from '@nestjs/common';
-import {ConfigModule} from '@nestjs/config';
-import {loggingMiddleware, PrismaModule} from 'nestjs-prisma';
-import {CalcModule} from "@/controller/calc.module";
+import { Logger, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { loggingMiddleware, PrismaModule } from 'nestjs-prisma';
+import { CalcModule } from '@/controller/calc.module';
 
 @Module({
   imports: [
@@ -19,8 +19,7 @@ import {CalcModule} from "@/controller/calc.module";
         ],
       },
     }),
-    CalcModule
+    CalcModule,
   ],
 })
-export class AppModule {
-}
+export class AppModule {}
