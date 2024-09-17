@@ -36,7 +36,6 @@ export class CalcService {
   }
 
   async addIngredient(name: string, price: number) {
-    console.log(name, price);
     await this.prisma.ingredient.upsert({
       where: {
         name: name,
@@ -205,12 +204,12 @@ export class CalcService {
       for (const ingredient of cocktail.recipe.ingredients) {
         const ingredientName = ingredient.ingredientName;
         const oldAmount = ingredients.get(ingredientName) ?? 0;
-        ingredients.set(ingredientName, oldAmount + amount * ingredient.amount);
+        const ingredientAmountInLiters = amount * ingredient.amount / 100;
+        ingredients.set(ingredientName, oldAmount + ingredientAmountInLiters);
         // prices are in €/l, but ingredient amounts are in cl
-        price += amount * ingredient.amount * ingredient.ingredient.price / 100;
+        price += ingredientAmountInLiters * ingredient.ingredient.price;
       }
     }
-    console.log(ingredients);
     return { ingredients, price };
   }
 }
