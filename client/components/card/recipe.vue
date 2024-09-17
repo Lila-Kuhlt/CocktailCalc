@@ -5,10 +5,8 @@
       <ul class="mt-2 flex w-full flex-col justify-between gap-y-1">
         <li v-for="ingredient in ingredients" :key="ingredient.name">
           <form class="flex items-center gap-x-3">
-            <h4 class="w-full text-lg">
-              {{ ingredient.name }}
-            </h4>
-            <FormInputAmount
+            <LayoutItemTitle :title="ingredient.name" />
+            <FormInputCl
               class="w-16"
               :value="ingredient.amount"
               name="amount"
@@ -42,8 +40,6 @@
 </template>
 
 <script lang="ts">
-import { call_recipe_upsert_ingredient } from '~/utils/api';
-
 export default defineComponent({
   setup() {
     const ingredients_many: Array<string> = ref([]);
