@@ -7,7 +7,7 @@
       @click="delete_item"
       class="absolute"
     />
-    <div class="w-min-16 px-4 py-5 sm:p-6 sm:pr-8">
+    <div class="w-min-16 px-8 py-5 sm:p-6">
       <slot />
     </div>
   </div>

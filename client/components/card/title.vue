@@ -1,8 +1,5 @@
 <template>
-  <h3
-    class="truncate whitespace-nowrap text-2xl font-semibold text-secondary-800"
-    :title="title"
-  >
+  <h3 class="truncate whitespace-nowrap text-2xl font-semibold" :title="title">
     {{ title }}
   </h3>
 </template>

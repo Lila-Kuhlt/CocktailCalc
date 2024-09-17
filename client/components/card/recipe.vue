@@ -76,8 +76,9 @@ export default defineComponent({
     add_ingredient(e: Event) {
       const form = e.target as HTMLFormElement;
       const form_data = new FormData(form);
-      const ingredient_name = form_data.get('ingredient') as string;
+      const ingredient_name = form_data.get('ingredient') as string | null;
       const ingredient_amount = parseFloat(form_data.get('amount') as string);
+      if (ingredient_name === null || isNaN(ingredient_amount)) return;
       const upsert_ingredient = {
         recipe: this.name,
         ingredient: ingredient_name,
