@@ -37,8 +37,8 @@ export class CalcService {
     return this.prisma.ingredient.findMany();
   }
 
-  async addIngredient(name: string, price: number) {
-    await this.prisma.ingredient.upsert({
+  async addIngredient(name: string, price: number): Promise<Ingredient> {
+    return this.prisma.ingredient.upsert({
       where: {
         name: name,
       },
@@ -90,8 +90,8 @@ export class CalcService {
     });
   }
 
-  async addRecipe(name: string, description: string) {
-    await this.prisma.recipe.upsert({
+  async addRecipe(name: string, description: string): Promise<RecipeWithIngredients> {
+    return this.prisma.recipe.upsert({
       where: {
         name: name,
       },
@@ -103,6 +103,14 @@ export class CalcService {
         description: description,
         price: 0.0,
       },
+      include: {
+        ingredients: {
+          select: {
+            name: true,
+            amount: true,
+          },
+        },
+      },
     });
   }
 
@@ -110,7 +118,7 @@ export class CalcService {
     recipe: string,
     ingredient: string,
     amount: number,
-  ) {
+  ): Promise<RecipeWithIngredients> {
     const result = await this.prisma.ingredientAmount.upsert({
       where: {
         recipeName_name: {
@@ -138,6 +146,7 @@ export class CalcService {
     for (const recipeAmount of result.Recipe?.RecipeAmount ?? []) {
       await this.updateEventPrice(recipeAmount.eventName);
     }
+    return this.getRecipe(recipe);
   }
 
   async deleteRecipe(name: string) {
@@ -155,7 +164,7 @@ export class CalcService {
     }
   }
 
-  async deleteRecipeIngredient(recipe: string, ingredient: string) {
+  async deleteRecipeIngredient(recipe: string, ingredient: string): Promise<RecipeWithIngredients> {
     await this.prisma.ingredientAmount.delete({
       where: {
         recipeName_name: {
@@ -176,6 +185,7 @@ export class CalcService {
     for (const component of result?.RecipeAmount ?? []) {
       await this.updateEventPrice(component.eventName);
     }
+    return this.getRecipe(recipe);
   }
 
   async getEvents(): Promise<EventWithRecipes[]> {
@@ -191,8 +201,8 @@ export class CalcService {
     });
   }
 
-  async addEvent(name: string) {
-    await this.prisma.event.upsert({
+  async addEvent(name: string): Promise<EventWithRecipes> {
+    return this.prisma.event.upsert({
       where: {
         name: name,
       },
@@ -200,6 +210,14 @@ export class CalcService {
       create: {
         name: name,
         price: 0.0,
+      },
+      include: {
+        recipes: {
+          select: {
+            name: true,
+            amount: true,
+          },
+        },
       },
     });
   }
@@ -222,6 +240,7 @@ export class CalcService {
       },
     });
     await this.updateEventPrice(event);
+    return this.getEvent(event);
   }
 
   async deleteEvent(name: string) {
@@ -242,6 +261,7 @@ export class CalcService {
       },
     });
     await this.updateEventPrice(event);
+    return this.getEvent(event);
   }
 
   async getEventList(name: string): Promise<{ ingredients: Map<string, number>, price: number }> {
@@ -282,6 +302,38 @@ export class CalcService {
       }
     }
     return { ingredients, price: event?.price ?? 0.0 };
+  }
+
+  private async getRecipe(name: string): Promise<RecipeWithIngredients> {
+    return (await this.prisma.recipe.findUnique({
+      where: {
+        name: name,
+      },
+      include: {
+        ingredients: {
+          select: {
+            name: true,
+            amount: true,
+          },
+        },
+      },
+    }))!;
+  }
+
+  private async getEvent(name: string): Promise<EventWithRecipes> {
+    return (await this.prisma.event.findUnique({
+      where: {
+        name: name,
+      },
+      include: {
+        recipes: {
+          select: {
+            name: true,
+            amount: true,
+          },
+        },
+      },
+    }))!;
   }
 
   private async updateRecipePrice(name: string) {
