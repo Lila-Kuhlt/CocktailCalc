@@ -1,8 +1,8 @@
 <template>
   <Card @delete="delete_event">
-    <div class="flex flex-col items-center justify-between gap-y-2">
+    <div class="flex h-full flex-col items-center justify-between gap-y-2">
       <CardTitle :title="name" />
-      <ul class="mt-2 flex w-full flex-grow flex-col justify-between gap-y-1">
+      <ul class="mt-2 flex flex-grow flex-col justify-between gap-y-1">
         <li v-for="recipe in recipes" :key="recipe.name">
           <form class="flex items-center gap-x-3">
             <LayoutItemTitle :title="recipe.name" />
@@ -23,13 +23,19 @@
             />
           </form>
         </li>
-        <LayoutLineSeparator class="my-2" title="Rezept hinzufügen" />
         <li class="mt-auto">
-          <form @submit.prevent="add_recipe" class="flex gap-x-3">
-            <SelectItems :options="recipes_many" name="recipe"></SelectItems>
-            <FormInputAmount class="w-16" value="0" name="amount" required />
-            <ButtonPlus class="ml-4" type="submit" title="Rezept hinzufügen" />
-          </form>
+          <LayoutLineSeparator class="my-3" title="Rezept hinzufügen" />
+          <div>
+            <form @submit.prevent="add_recipe" class="flex gap-x-3">
+              <SelectItems :options="recipes_many" name="recipe"></SelectItems>
+              <FormInputAmount class="w-16" value="0" name="amount" required />
+              <ButtonPlus
+                class="ml-4"
+                type="submit"
+                title="Rezept hinzufügen"
+              />
+            </form>
+          </div>
         </li>
       </ul>
     </div>
