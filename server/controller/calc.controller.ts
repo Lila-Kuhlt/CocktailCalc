@@ -7,6 +7,11 @@ import {
 import { ApiOperation, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Ingredient, Recipe } from '@prisma/client';
 
+class NameDto {
+  @ApiProperty()
+  name!: string;
+}
+
 class IngredientDto {
   @ApiProperty()
   name!: string;
@@ -79,8 +84,8 @@ export class CalcController {
 
   @Delete('ingredient')
   @ApiOperation({ summary: 'delete ingredient' })
-  async deleteIngredient(@Body() name: string) {
-    await this.appService.deleteIngredient(name);
+  async deleteIngredient(@Body() data: NameDto) {
+    await this.appService.deleteIngredient(data.name);
   }
 
   // recipes
@@ -109,8 +114,8 @@ export class CalcController {
 
   @Delete('recipe')
   @ApiOperation({ summary: 'delete recipe' })
-  async deleteRecipe(@Body() name: string) {
-    await this.appService.deleteRecipe(name);
+  async deleteRecipe(@Body() data: NameDto) {
+    await this.appService.deleteRecipe(data.name);
   }
 
   @Delete('recipe/ingredient')
@@ -129,8 +134,8 @@ export class CalcController {
 
   @Post('event')
   @ApiOperation({ summary: 'add or update event' })
-  async addEvent(@Body() name: string) {
-    await this.appService.addEvent(name);
+  async addEvent(@Body() data: NameDto) {
+    await this.appService.addEvent(data.name);
   }
 
   @Post('event/recipe')
@@ -141,8 +146,8 @@ export class CalcController {
 
   @Delete('event')
   @ApiOperation({ summary: 'delete event' })
-  async deleteEvent(@Body() name: string) {
-    await this.appService.deleteEvent(name);
+  async deleteEvent(@Body() data: NameDto) {
+    await this.appService.deleteEvent(data.name);
   }
 
   @Delete('event/recipe')
@@ -153,8 +158,8 @@ export class CalcController {
 
   @Get('event/list')
   @ApiOperation({ summary: 'buying list for event' })
-  async getEventList(@Body() name: string): Promise<{ ingredients: Object, price: number }> {
-    const list = await this.appService.getEventList(name);
+  async getEventList(@Body() data: NameDto): Promise<{ ingredients: Object, price: number }> {
+    const list = await this.appService.getEventList(data.name);
     return { ingredients: Object.fromEntries(list.ingredients), price: list.price };
   }
 }
