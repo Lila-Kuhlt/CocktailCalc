@@ -26,7 +26,7 @@ export async function createApp(): Promise<INestApplication> {
   app.enableCors({
     origin: '*',
     methods: 'GET,POST,DELETE',
-    props: 'Content-Type',
+    allowedHeaders: 'Content-Type',
   });
   const config = new DocumentBuilder()
     .setTitle('CocktailCalc API')
