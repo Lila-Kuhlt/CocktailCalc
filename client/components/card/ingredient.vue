@@ -2,7 +2,7 @@
   <Card @delete="delete_ingredient">
     <div class="flex items-center justify-between gap-x-2">
       <CardTitle :title="name" />
-      <form ref="form">
+      <form ref="form" class="mr-3">
         <FormInputPrice
           class="w-24 text-right"
           @focusout="update_price"
