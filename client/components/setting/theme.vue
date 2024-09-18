@@ -20,17 +20,17 @@
   >
     <SunIcon
       v-if="settings.theme === 'light'"
-      class="text-primary-800 h-5 w-5"
+      class="h-5 w-5 text-primary-800 dark:text-primary-900"
       aria-hidden="true"
     />
     <MoonIcon
       v-else-if="settings.theme === 'dark'"
-      class="text-primary-800 h-5 w-5"
+      class="h-5 w-5 text-primary-800 dark:text-primary-900"
       aria-hidden="true"
     />
     <ComputerDesktopIcon
       v-else
-      class="text-primary-800 h-5 w-5"
+      class="h-5 w-5 text-primary-800 dark:text-primary-900"
       aria-hidden="true"
     />
   </Dropdown>
