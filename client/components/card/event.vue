@@ -43,8 +43,6 @@
 </template>
 
 <script lang="ts">
-import { call_event_delete_recipe } from '~/utils/api';
-
 export default defineComponent({
   setup() {
     const recipes_many: Array<string> = ref([]);

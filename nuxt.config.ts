@@ -18,7 +18,13 @@ export default defineNuxtConfig({
   ],
 
   devServer: {
-    port: process.env.PORT_FRONTEND,
+    port: process.env.FRONTEND_PORT,
+  },
+
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.BACKEND_ENDPOINT_URL,
+    },
   },
 
   colorMode: {
