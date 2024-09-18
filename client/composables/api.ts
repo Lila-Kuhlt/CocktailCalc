@@ -12,17 +12,18 @@ export async function call_api(method: Method, path: string, data?: any) {
   return call_url(method, `${base_url}${path}`, data);
 }
 
-async function call_url(
+export function call_url(
   method: string,
   url: string,
   data?: any,
 ): Promisey<any> {
   return new Promise<any>(async (resolve, reject) => {
-    const res = await fetch(url, {
+    const res = await useFetch(url, {
       method,
       headers: {
         'Content-Type': 'application/json',
       },
+      server: true,
       body: JSON.stringify(data),
     }).catch((e) => {
       alert('Etwas ist schief gelaufen. Versuche es später erneut!');
@@ -30,7 +31,7 @@ async function call_url(
       reject();
     });
     try {
-      resolve(await res.json());
+      resolve(res.data.value);
     } catch (e) {
       resolve(null);
     }
