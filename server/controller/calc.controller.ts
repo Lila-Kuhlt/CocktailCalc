@@ -98,8 +98,8 @@ export class CalcController {
 
   @Post('recipe')
   @ApiOperation({ summary: 'add or update recipe' })
-  async addRecipe(@Body() data: RecipeDto) {
-    await this.appService.addRecipe(data.name, data.description ?? "");
+  async addRecipe(@Body() data: RecipeDto): Promise<RecipeWithIngredients> {
+    return this.appService.addRecipe(data.name, data.description ?? "");
   }
 
   @Post('recipe/ingredient')
@@ -134,8 +134,8 @@ export class CalcController {
 
   @Post('event')
   @ApiOperation({ summary: 'add or update event' })
-  async addEvent(@Body() data: NameDto) {
-    await this.appService.addEvent(data.name);
+  async addEvent(@Body() data: NameDto): Promise<EventWithRecipes> {
+    return this.appService.addEvent(data.name);
   }
 
   @Post('event/recipe')

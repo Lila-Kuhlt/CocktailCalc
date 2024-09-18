@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { Ingredient } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 
+/*
+Note: It is important to update the prices whenever an operation may change them!
+This can be done by using `updateRecipePrice` (which also updates event prices) and `updateEventPrice`.
+*/
+
 export type RecipeWithIngredients = {
   name: string;
   description: string;
@@ -37,8 +42,8 @@ export class CalcService {
     return this.prisma.ingredient.findMany();
   }
 
-  async addIngredient(name: string, price: number): Promise<Ingredient> {
-    return this.prisma.ingredient.upsert({
+  async addIngredient(name: string, price: number) {
+    const ingredient = await this.prisma.ingredient.upsert({
       where: {
         name: name,
       },
@@ -49,27 +54,25 @@ export class CalcService {
         name: name,
         price: price,
       },
+      include: {
+        IngredientAmount: true,
+      },
     });
+    for (const ingredientAmount of ingredient.IngredientAmount) {
+      await this.updateRecipePrice(ingredientAmount.recipeName);
+    }
   }
 
   async deleteIngredient(name: string) {
-    const result = await this.prisma.ingredient.delete({
+    const ingredient = await this.prisma.ingredient.delete({
       where: {
         name: name,
       },
       include: {
-        IngredientAmount: {
-          include: {
-            Recipe: {
-              include: {
-                RecipeAmount: true,
-              },
-            },
-          },
-        },
+        IngredientAmount: true,
       },
     });
-    for (const ingredientAmount of result?.IngredientAmount ?? []) {
+    for (const ingredientAmount of ingredient.IngredientAmount) {
       await this.updateRecipePrice(ingredientAmount.recipeName);
     }
   }
@@ -137,12 +140,17 @@ export class CalcService {
   }
 
   async deleteRecipe(name: string) {
-    await this.prisma.recipe.delete({
+    const recipe = await this.prisma.recipe.delete({
       where: {
         name: name,
       },
+      include: {
+        RecipeAmount: true,
+      },
     });
-    await this.updateRecipePrice(name);
+    for (const recipeAmount of recipe.RecipeAmount) {
+      await this.updateEventPrice(recipeAmount.eventName);
+    }
   }
 
   async deleteRecipeIngredient(recipe: string, ingredient: string): Promise<RecipeWithIngredients> {
