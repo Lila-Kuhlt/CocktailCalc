@@ -73,7 +73,7 @@ export class CalcController {
   @Get('ingredients')
   @ApiOperation({ summary: 'list of all ingredients' })
   async getIngredients(): Promise<Ingredient[]> {
-    return await this.appService.getIngredients();
+    return this.appService.getIngredients();
   }
 
   @Post('ingredient')
@@ -93,7 +93,7 @@ export class CalcController {
   @Get('recipes')
   @ApiOperation({ summary: 'list of all recipes' })
   async getRecipes(): Promise<RecipeWithIngredients[]> {
-    return await this.appService.getRecipes();
+    return this.appService.getRecipes();
   }
 
   @Post('recipe')
@@ -104,8 +104,8 @@ export class CalcController {
 
   @Post('recipe/ingredient')
   @ApiOperation({ summary: 'add ingredient to recipe' })
-  async addRecipeIngredient(@Body() data: RecipeIngredientDto) {
-    await this.appService.addIngredientAmount(
+  async addRecipeIngredient(@Body() data: RecipeIngredientDto): Promise<RecipeWithIngredients> {
+    return this.appService.addIngredientAmount(
       data.recipe,
       data.ingredient,
       data.amount,
@@ -120,8 +120,8 @@ export class CalcController {
 
   @Delete('recipe/ingredient')
   @ApiOperation({ summary: 'delete ingredient from recipe' })
-  async deleteRecipeIngredient(@Body() data: DeleteRecipeIngredientDto) {
-    await this.appService.deleteRecipeIngredient(data.recipe, data.ingredient);
+  async deleteRecipeIngredient(@Body() data: DeleteRecipeIngredientDto): Promise<RecipeWithIngredients> {
+    return this.appService.deleteRecipeIngredient(data.recipe, data.ingredient);
   }
 
   // events
@@ -129,7 +129,7 @@ export class CalcController {
   @Get('events')
   @ApiOperation({ summary: 'list of all events' })
   async getEvents(): Promise<EventWithRecipes[]> {
-    return await this.appService.getEvents();
+    return this.appService.getEvents();
   }
 
   @Post('event')
@@ -140,8 +140,8 @@ export class CalcController {
 
   @Post('event/recipe')
   @ApiOperation({ summary: 'add recipe to event' })
-  async addEventRecipe(@Body() data: EventRecipeDto) {
-    await this.appService.addEventRecipe(data.event, data.recipe, data.amount);
+  async addEventRecipe(@Body() data: EventRecipeDto): Promise<EventWithRecipes> {
+    return this.appService.addEventRecipe(data.event, data.recipe, data.amount);
   }
 
   @Delete('event')
@@ -152,8 +152,8 @@ export class CalcController {
 
   @Delete('event/recipe')
   @ApiOperation({ summary: 'delete recipe from event' })
-  async deleteEventRecipe(@Body() data: DeleteEventRecipeDto) {
-    await this.appService.deleteEventRecipe(data.event, data.recipe);
+  async deleteEventRecipe(@Body() data: DeleteEventRecipeDto): Promise<EventWithRecipes> {
+    return this.appService.deleteEventRecipe(data.event, data.recipe);
   }
 
   @Get('event/list')
