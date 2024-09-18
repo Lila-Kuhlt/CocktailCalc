@@ -20,7 +20,7 @@ export async function createApp(): Promise<INestApplication> {
           defaultSrc: [`'self'`],
         },
       },
-      crossOriginEmbedderPolicy: true,
+      crossOriginEmbedderPolicy: false,
     }),
   );
   const config = new DocumentBuilder()

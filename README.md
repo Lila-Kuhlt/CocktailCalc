@@ -18,8 +18,8 @@ be given as node environment variables via the command line (e.g. `PORT=3001 npm
 Follow this steps assuming you have installed Node.js and npm:
 
 1. Clone the repository
-2. Run `npm install` in the root directory
-3. Run `npm run build` to build everything (You can also run `npm run build:client`, `npm run build:server` or
-   `npm run build:db` to build individual parts)
-4. Run `npm run start:server` to start the server
-5. Run `npm run start:client` to start the client
+2. Configure the `.env` file as described above
+3. Run `npm install` in the root directory
+4. Run `npm run build` to build everything (You can also run `npm run build:client`, `npm run build:server` or `npm run build:db` to build individual parts)
+5. Run `npm run start:server` to start the server
+6. Run `npm run start:client` to start the client
