@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "postgresql" // or "sqlite"
+  url      = env("DATABASE_URL") // or "file:./db.sqlite3" for sqlite
 }
 
 model Event {
@@ -23,6 +23,7 @@ model RecipeAmount {
 
   recipe Recipe @relation(fields: [name], references: [name], onDelete: Cascade)
   Event  Event? @relation(fields: [eventName], references: [name], onDelete: Cascade)
+
   @@unique([eventName, name])
 }
 
@@ -41,6 +42,7 @@ model IngredientAmount {
 
   Recipe     Recipe?    @relation(fields: [recipeName], references: [name], onDelete: Cascade)
   ingredient Ingredient @relation(fields: [name], references: [name], onDelete: Cascade)
+
   @@unique([recipeName, name])
 }
 
