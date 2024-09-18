@@ -2,15 +2,15 @@ import * as Joi from 'joi';
 
 export const EnvValidationSchema = Joi.object({
   FRONTEND_PORT: Joi.number()
+    .default(3000)
     .port()
-    .default('3000')
     .description(
       'The port the frontend server should listen on (client dev only)',
     ),
 
   BACKEND_PORT: Joi.number()
+    .default(3001)
     .port()
-    .default('3001')
     .description('The port the backend server should listen on'),
 
   BACKEND_ENDPOINT_URL: Joi.string()
