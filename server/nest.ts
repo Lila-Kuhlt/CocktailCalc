@@ -9,7 +9,6 @@ export async function createApp(): Promise<INestApplication> {
     snapshot: true,
   });
   app.enableShutdownHooks();
-  app.setGlobalPrefix('api');
   app.use(
     helmet({
       contentSecurityPolicy: {
@@ -26,13 +25,15 @@ export async function createApp(): Promise<INestApplication> {
   );
   const config = new DocumentBuilder()
     .setTitle('CocktailCalc API')
-    .setDescription(`
+    .setDescription(
+      `
 The CocktailCalc API description
 
 * amounts are in cl
 * prices are in €/cl
 * buying list amounts are in l
-    `)
+    `,
+    )
     .setVersion('1.0-alpha')
     .build();
   const document = SwaggerModule.createDocument(app, config);
