@@ -9,6 +9,7 @@ export async function createApp(): Promise<INestApplication> {
     snapshot: true,
   });
   app.enableShutdownHooks();
+  app.setGlobalPrefix('api');
   app.use(
     helmet({
       contentSecurityPolicy: {

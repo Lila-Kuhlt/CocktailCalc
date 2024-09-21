@@ -5,6 +5,7 @@ export default defineNuxtConfig({
     '@/prisma/*': './prisma/*',
   },
 
+  compatibilityDate: '2024-09-16',
   devtools: { enabled: true },
   workspaceDir: '.',
   srcDir: 'client/',
@@ -22,9 +23,7 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    public: {
-      apiBase: process.env.BACKEND_ENDPOINT_URL,
-    },
+    apiBase: process.env.BACKEND_ENDPOINT_URL,
   },
 
   colorMode: {
@@ -44,8 +43,6 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-
-  compatibilityDate: '2024-09-16',
 
   pinia: {
     autoImports: ['defineStore'],

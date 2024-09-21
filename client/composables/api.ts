@@ -1,6 +1,8 @@
 // -------------------
 // General
 // -------------------
+const api_base = '/api';
+
 export enum Method {
   GET = 'GET',
   POST = 'POST',
@@ -8,8 +10,7 @@ export enum Method {
 }
 
 export async function call_api(method: Method, path: string, data?: any) {
-  const base_url = useRuntimeConfig().public.apiBase;
-  return call_url(method, `${base_url}${path}`, data);
+  return call_url(method, `${api_base}${path}`, data);
 }
 
 export function call_url(
