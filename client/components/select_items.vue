@@ -21,11 +21,7 @@ const props = defineProps<{
     type: Array<string>;
     required: true;
   };
-  default: {
-    type: string;
-    default: '';
-  };
 }>();
 
-const selected = ref(props.default ?? props.options[0]);
+const selected = ref(props.options[0]);
 </script>

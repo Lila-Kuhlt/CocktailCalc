@@ -33,7 +33,6 @@ export default defineComponent({
 
     call_recipe_get_many().then((data) => {
       recipes.value = data;
-      console.log(data);
     });
 
     return {
@@ -46,23 +45,22 @@ export default defineComponent({
       const form_data = new FormData(form);
       const recipe_name = form_data.get('name') as string;
       call_recipe_upsert(recipe_name).then(() => {
-        this.recipes.push({ name: recipe_name, ingredients: [] });
+        const recipe = this.find_recipe(recipe_name);
+        if (!recipe) {
+          this.recipes.push({ name: recipe_name, ingredients: [] });
+        }
         this.$refs.add_receipt_toggle.hide();
       });
     },
     delete_recipe(recipe_name: string) {
-      this.recipes = this.recipes.filter(
-        (recipe) => recipe.name !== recipe_name,
-      );
+      this.filter_recipe(recipe_name);
     },
     upsert_recipe_ingredient(upsert_ingredient: {
       recipe: string;
       ingredient: string;
       amount: number;
     }) {
-      const recipe = this.recipes.find(
-        (recipe) => recipe.name === upsert_ingredient.recipe,
-      );
+      const recipe = this.find_recipe(upsert_ingredient.recipe);
       if (recipe) {
         const ingredient = recipe.ingredients.find(
           (ingredient) => ingredient.name === upsert_ingredient.ingredient,
@@ -81,12 +79,24 @@ export default defineComponent({
       recipe: string;
       ingredient: string;
     }) {
-      const recipe = this.recipes.find(
-        (recipe) => recipe.name === recipe_ingredient.recipe,
+      this.filter_recipe_ingredient(
+        recipe_ingredient.recipe,
+        recipe_ingredient.ingredient,
       );
+    },
+    find_recipe(recipe_name: string) {
+      return this.recipes.find((recipe) => recipe.name === recipe_name);
+    },
+    filter_recipe(recipe_name: string) {
+      this.recipes = this.recipes.filter(
+        (recipe) => recipe.name !== recipe_name,
+      );
+    },
+    filter_recipe_ingredient(recipe_name: string, ingredient_name: string) {
+      const recipe = this.find_recipe(recipe_name);
       if (recipe) {
         recipe.ingredients = recipe.ingredients.filter(
-          (ingredient) => ingredient.name !== recipe_ingredient.ingredient,
+          (ingredient) => ingredient.name !== ingredient_name,
         );
       }
     },

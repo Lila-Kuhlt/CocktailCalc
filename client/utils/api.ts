@@ -19,7 +19,7 @@ export function call_url(
   data?: any,
 ): Promisey<any> {
   return new Promise<any>(async (resolve, reject) => {
-    const res = await useFetch(url, {
+    const res = await fetch(url, {
       method,
       headers: {
         'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export function call_url(
       reject();
     });
     try {
-      resolve(res.data.value);
+      resolve(await res.json());
     } catch (e) {
       resolve(null);
     }

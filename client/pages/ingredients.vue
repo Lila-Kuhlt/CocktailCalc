@@ -44,7 +44,7 @@ export default defineComponent({
       const name = form_data.get('name') as string;
       const price = 0.0;
       call_ingredient_upsert(name, price).then(() => {
-        this.ingredients.push({ name, price });
+        this.upsert_ingredient(name, price);
         this.hide_add_ingredient();
       });
     },

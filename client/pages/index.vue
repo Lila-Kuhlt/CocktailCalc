@@ -45,22 +45,22 @@ export default defineComponent({
       const form_data = new FormData(form);
       const event_name = form_data.get('name') as string;
       call_event_upsert(event_name).then(() => {
-        this.events.push({ name: event_name, recipes: [] });
+        const event = this.find_event(event_name);
+        if (!event) {
+          this.events.push({ name: event_name, recipes: [] });
+        }
         this.$refs.add_event_toggle.hide();
       });
     },
     delete_event(event_name: string) {
-      this.events = this.events.filter((events) => events.name !== event_name);
+      this.filter_event(event_name);
     },
     upsert_event_recipe(upsert_recipe: {
       event: string;
       recipe: string;
       amount: number;
     }) {
-      console.log(upsert_recipe);
-      const event = this.events.find(
-        (event) => event.name === upsert_recipe.event,
-      );
+      const event = this.find_event(upsert_recipe.event);
       if (event) {
         const recipe = event.recipes.find(
           (recipe) => recipe.name === upsert_recipe.recipe,
@@ -76,12 +76,19 @@ export default defineComponent({
       }
     },
     delete_event_recipe(delete_recipe: { event: string; recipe: string }) {
-      const event = this.events.find(
-        (event) => event.name === delete_recipe.event,
-      );
+      this.filter_event_recipe(delete_recipe.event, delete_recipe.recipe);
+    },
+    find_event(event_name: string) {
+      return this.events.find((event) => event.name === event_name);
+    },
+    filter_event(event_name: string) {
+      this.events = this.events.filter((event) => event.name !== event_name);
+    },
+    filter_event_recipe(event_name: string, recipe_name: string) {
+      const event = this.find_event(event_name);
       if (event) {
         event.recipes = event.recipes.filter(
-          (recipe) => recipe.name !== delete_recipe.recipe,
+          (recipe) => recipe.name !== recipe_name,
         );
       }
     },

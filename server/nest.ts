@@ -16,7 +16,7 @@ export async function createApp(): Promise<INestApplication> {
         directives: {
           imgSrc: ["'self'"],
           styleSrc: [`'self'`],
-          scriptSrc: ["'self'", "https: 'unsafe-inline'", "'unsafe-eval'"],
+          scriptSrc: ["'self'"],
           objectSrc: ["'self'"],
           defaultSrc: [`'self'`],
         },
