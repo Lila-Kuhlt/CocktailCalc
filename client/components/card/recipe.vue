@@ -23,6 +23,14 @@
             />
           </form>
         </li>
+        <LayoutLineSeparator v-if="ingredients.length > 0" class="my-3" />
+        <li
+          v-if="ingredients.length > 0"
+          class="-mb-3 flex items-center gap-x-3"
+        >
+          <LayoutItemTitle class="font-semibold" title="Summe" />
+          <LayoutItemCl class="mr-10" :cl="cl_sum" />
+        </li>
         <li class="mt-auto">
           <LayoutLineSeparator class="my-3" title="Zutat hinzufügen" />
           <form @submit.prevent="add_ingredient" class="flex gap-x-3">
@@ -51,6 +59,13 @@ export default defineComponent({
     return {
       ingredients_many,
     };
+  },
+  computed: {
+    cl_sum() {
+      return this.ingredients.reduce((acc, ingredient) => {
+        return acc + ingredient.amount;
+      }, 0);
+    },
   },
   emits: [
     'update_price',
