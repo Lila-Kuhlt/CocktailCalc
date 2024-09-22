@@ -17,6 +17,9 @@ export default <Partial<Config>>{
         primary: colors.indigo,
         secondary: colors.gray,
       },
+      fontFamily: {
+        poppins: 'Poppins, sans-serif',
+      },
     },
   },
 };

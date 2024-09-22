@@ -1,0 +1,10 @@
+{
+  "extends": "../../.nuxt/tsconfig.server.json",
+  "exclude": [
+    "node_modules",
+    "server",
+    ".nest",
+    "nest-cli.json",
+    "graphql.config.yml"
+  ]
+}

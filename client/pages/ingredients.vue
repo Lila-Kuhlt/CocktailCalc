@@ -1,10 +1,17 @@
 <template>
   <LayoutSection class="space-y-4 p-6">
     <LayoutPageTitle class="text-3xl font-bold">Zutaten</LayoutPageTitle>
-    <Bigbutton @click="$refs.add_modal.show()">Neue Zutat</Bigbutton>
-    <div
-      class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-    >
+    <ButtonToggle ref="add_ingredient_toggle" button_text="Zutat hinzufügen">
+      <form
+        @submit.prevent="add_ingredient"
+        class="flex items-center space-x-2"
+      >
+        <FormInput placeholder="Zutatname" name="name" required />
+        <ButtonPlus type="submit" />
+        <ButtonMinus @click="hide_add_ingredient" />
+      </form>
+    </ButtonToggle>
+    <LayoutGrid>
       <CardIngredient
         v-for="ingredient in ingredients"
         :key="ingredient.name"
@@ -13,9 +20,8 @@
         @update="update_ingredient"
         @delete="delete_ingredient"
       />
-    </div>
+    </LayoutGrid>
   </LayoutSection>
-  <ModalIngredient @upserted_ingredient="upsert_ingredient" ref="add_modal" />
 </template>
 
 <script lang="ts">
@@ -32,6 +38,16 @@ export default defineComponent({
     };
   },
   methods: {
+    add_ingredient(e: Event) {
+      const form = e.target as HTMLFormElement;
+      const form_data = new FormData(form);
+      const name = form_data.get('name') as string;
+      const price = 0.0;
+      call_ingredient_upsert(name, price).then(() => {
+        this.upsert_ingredient(name, price);
+        this.hide_add_ingredient();
+      });
+    },
     upsert_ingredient(name: string, price: number) {
       const ingredient = this.find_ingredient(name);
       if (ingredient) ingredient.price = price;
@@ -47,6 +63,9 @@ export default defineComponent({
     },
     find_ingredient(name: string) {
       return this.ingredients.find((i) => i.name === name);
+    },
+    hide_add_ingredient() {
+      this.$refs.add_ingredient_toggle.hide();
     },
   },
 });

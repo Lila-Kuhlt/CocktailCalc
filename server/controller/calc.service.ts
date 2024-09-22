@@ -9,7 +9,7 @@ This can be done by using `updateRecipePrice` (which also updates event prices) 
 
 export type RecipeWithIngredients = {
   name: string;
-  description: string;
+  description: string | null;
   ingredients: IngredientWithAmount[];
   price: number;
 };

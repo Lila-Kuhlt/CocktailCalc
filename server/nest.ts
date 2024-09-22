@@ -14,16 +14,21 @@ export async function createApp(): Promise<INestApplication> {
     helmet({
       contentSecurityPolicy: {
         directives: {
-          imgSrc: ["'self'", 'data:', 'https://cdn.jsdelivr.net'],
-          styleSrc: [`'self'`, `'unsafe-inline'`, 'https://cdn.jsdelivr.net'],
-          scriptSrc: ["'self'", "https: 'unsafe-inline'", "'unsafe-eval'"],
+          imgSrc: ["'self'"],
+          styleSrc: [`'self'`],
+          scriptSrc: ["'self'"],
           objectSrc: ["'self'"],
           defaultSrc: [`'self'`],
         },
       },
-      crossOriginEmbedderPolicy: true,
+      crossOriginEmbedderPolicy: false,
     }),
   );
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,POST,DELETE',
+    allowedHeaders: 'Content-Type',
+  });
   const config = new DocumentBuilder()
     .setTitle('CocktailCalc API')
     .setDescription(`
@@ -32,7 +37,7 @@ The CocktailCalc API description
 * amounts are in cl
 * prices are in €/cl
 * buying list amounts are in l
-    `)
+`)
     .setVersion('1.0-alpha')
     .build();
   const document = SwaggerModule.createDocument(app, config);
