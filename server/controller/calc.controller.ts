@@ -158,8 +158,8 @@ export class CalcController {
 
   @Get('event/list')
   @ApiOperation({ summary: 'buying list for event' })
-  async getEventList(@Body() data: NameDto): Promise<{ ingredients: Object, price: number }> {
-    const list = await this.appService.getEventList(data.name);
+  async getEventList(@Param("name") name: string): Promise<{ ingredients: Object, price: number }> {
+    const list = await this.appService.getEventList(name);
     return { ingredients: Object.fromEntries(list.ingredients), price: list.price };
   }
 }
