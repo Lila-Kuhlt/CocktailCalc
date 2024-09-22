@@ -23,6 +23,11 @@
             />
           </form>
         </li>
+        <LayoutLineSeparator v-if="recipes.length > 0" class="my-3" />
+        <li v-if="recipes.length > 0" class="-mb-3 flex items-center gap-x-3">
+          <LayoutItemTitle class="font-semibold" title="Summe" />
+          <LayoutItemAmount class="mr-10" :cl="amount_sum" />
+        </li>
         <li class="mt-auto">
           <LayoutLineSeparator class="my-3" title="Rezept hinzufügen" />
           <form @submit.prevent="add_recipe" class="flex gap-x-3">
@@ -30,17 +35,19 @@
             <FormInputAmount class="w-16" value="0" name="amount" required />
             <ButtonPlus class="ml-4" type="submit" title="Rezept hinzufügen" />
           </form>
-        </li>
-        <li class="mt-auto">
-          <LayoutLineSeparator class="my-3" title="Zutaten" />
-          <div class="flex flex-col gap-y-3">
+          <LayoutLineSeparator
+            v-if="recipes.length > 0"
+            class="my-3"
+            title="Zutaten"
+          />
+          <div v-if="recipes.length > 0" class="flex flex-col gap-y-3">
             <div
               v-for="ingredient in ingredients_many"
               :key="ingredient.name"
               class="flex items-center justify-between"
             >
               <LayoutItemTitle :title="ingredient.name" />
-              <LayoutItemAmount
+              <LayoutItemL
                 class="ml-auto text-right"
                 :amount="ingredient.amount"
               />
@@ -65,16 +72,20 @@ export default defineComponent({
     });
 
     call_event_ingredient_list(props.name).then((data) => {
-      ingredients_many.value = Object.keys(data.ingredients).map((name) => ({
-        name,
-        amount: data.ingredients[name],
-      }));
+      ingredients_many.value = data.ingredients;
     });
 
     return {
       recipes_many,
       ingredients_many,
     };
+  },
+  computed: {
+    amount_sum() {
+      return this.recipes.reduce((acc, recipe) => {
+        return acc + recipe.amount;
+      }, 0);
+    },
   },
   emits: [
     'update_price',
@@ -145,10 +156,7 @@ export default defineComponent({
     },
     update_ingredient_list() {
       call_event_ingredient_list(this.name).then((data) => {
-        this.ingredients_many = Object.keys(data.ingredients).map((name) => ({
-          name,
-          amount: data.ingredients[name],
-        }));
+        this.ingredients_many = data.ingredients;
       });
     },
   },

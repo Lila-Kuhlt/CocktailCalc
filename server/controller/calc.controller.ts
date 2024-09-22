@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import {
   CalcService,
   EventWithRecipes,
+  IngredientWithAmount,
   RecipeWithIngredients,
 } from '@/controller/calc.service';
 import {
@@ -183,14 +184,10 @@ export class CalcController {
   }
 
   @Get('event/list/:name')
-  @ApiOperation({ summary: 'buying list for event' })
+  @ApiOperation({ summary: 'buying list for event (amounts are in l)' })
   async getEventList(
     @Param('name') name: string,
-  ): Promise<{ ingredients: Object; price: number }> {
-    const list = await this.appService.getEventList(name);
-    return {
-      ingredients: Object.fromEntries(list.ingredients),
-      price: list.price,
-    };
+  ): Promise<{ ingredients: IngredientWithAmount[]; price: number }> {
+    return this.appService.getEventList(name);
   }
 }

@@ -14,7 +14,7 @@ export type RecipeWithIngredients = {
   price: number;
 };
 
-type IngredientWithAmount = {
+export type IngredientWithAmount = {
   name: string;
   amount: number;
 };
@@ -39,7 +39,11 @@ export class CalcService {
   }
 
   async getIngredients(): Promise<Ingredient[]> {
-    return this.prisma.ingredient.findMany();
+    return this.prisma.ingredient.findMany({
+      orderBy: {
+        name: 'asc',
+      }
+    });
   }
 
   async addIngredient(name: string, price: number) {
@@ -85,7 +89,13 @@ export class CalcService {
             name: true,
             amount: true,
           },
+          orderBy: {
+            name: 'asc',
+          }
         },
+      },
+      orderBy: {
+        name: 'asc',
       },
     });
   }
@@ -112,6 +122,9 @@ export class CalcService {
             name: true,
             amount: true,
           },
+          orderBy: {
+            name: 'asc',
+          }
         },
       },
     });
@@ -182,6 +195,9 @@ export class CalcService {
           },
         },
       },
+      orderBy: {
+        name: 'asc',
+      }
     });
   }
 
@@ -201,6 +217,9 @@ export class CalcService {
             name: true,
             amount: true,
           },
+          orderBy: {
+            name: 'asc',
+          }
         },
       },
     });
@@ -250,7 +269,7 @@ export class CalcService {
 
   async getEventList(
     name: string,
-  ): Promise<{ ingredients: Map<string, number>; price: number }> {
+  ): Promise<{ ingredients: IngredientWithAmount[]; price: number }> {
     const event = await this.prisma.event.findUnique({
       where: {
         name: name,
@@ -278,16 +297,21 @@ export class CalcService {
         },
       },
     });
-    let ingredients = new Map();
+    let amounts = new Map();
     for (const cocktail of event?.recipes ?? []) {
       const amount = cocktail.amount;
       for (const ingredient of cocktail.recipe.ingredients) {
-        const oldAmount = ingredients.get(ingredient.name) ?? 0;
+        const oldAmount = amounts.get(ingredient.name) ?? 0;
         const ingredientAmountInLiters = (amount * ingredient.amount) / 100;
-        ingredients.set(ingredient.name, oldAmount + ingredientAmountInLiters);
+        amounts.set(ingredient.name, oldAmount + ingredientAmountInLiters);
       }
     }
-    return { ingredients, price: event?.price ?? 0.0 };
+    const ingredients = Array.from(amounts.entries()).filter(([_, amount]) => amount > 0).map(([name, amount]) => ({ name, amount }));
+    ingredients.sort((a, b) => a.name.localeCompare(b.name));
+    return {
+      ingredients,
+      price: event?.price ?? 0.0,
+    };
   }
 
   async findRecipe(name: string): Promise<RecipeWithIngredients> {
