@@ -47,10 +47,7 @@
               class="flex items-center justify-between"
             >
               <LayoutItemTitle :title="ingredient.name" />
-              <LayoutItemL
-                class="ml-auto text-right"
-                :amount="ingredient.amount"
-              />
+              <LayoutItemL class="ml-auto text-right" :l="ingredient.amount" />
             </div>
           </div>
         </li>

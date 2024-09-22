@@ -1,14 +1,14 @@
 <template>
   <div class="flex items-center gap-x-2" :title="amount">
-    <span>{{ cl }}</span>
-    <span class="font-semibold">L</span>
+    <span class="font-medium">{{ l }}</span>
+    <span class="font-medium">L</span>
   </div>
 </template>
 
 <script setup lang="ts">
 defineProps({
-  amount: {
-    type: String,
+  l: {
+    type: Number,
     required: true,
   },
 });
