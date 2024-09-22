@@ -38,7 +38,7 @@ model Recipe {
 }
 
 model IngredientAmount {
-  amount     Int
+  amount     Float
   recipeName String
   name       String @map("ingredientName")
 
