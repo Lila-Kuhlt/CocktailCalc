@@ -14,7 +14,7 @@ export type RecipeWithIngredients = {
   price: number;
 };
 
-type IngredientWithAmount = {
+export type IngredientWithAmount = {
   name: string;
   amount: number;
 };
@@ -250,7 +250,7 @@ export class CalcService {
 
   async getEventList(
     name: string,
-  ): Promise<{ ingredients: Map<string, number>; price: number }> {
+  ): Promise<{ ingredients: IngredientWithAmount[]; price: number }> {
     const event = await this.prisma.event.findUnique({
       where: {
         name: name,
@@ -287,7 +287,10 @@ export class CalcService {
         ingredients.set(ingredient.name, oldAmount + ingredientAmountInLiters);
       }
     }
-    return { ingredients, price: event?.price ?? 0.0 };
+    return {
+      ingredients: Array.from(ingredients.entries()).filter(([_, amount]) => amount > 0).map(([name, amount]) => ({ name, amount })),
+      price: event?.price ?? 0.0,
+    };
   }
 
   async findRecipe(name: string): Promise<RecipeWithIngredients> {
