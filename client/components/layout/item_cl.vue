@@ -8,7 +8,7 @@
 <script setup lang="ts">
 defineProps({
   cl: {
-    type: String,
+    type: Number,
     required: true,
   },
 });
