@@ -73,6 +73,12 @@ export async function call_event_delete_recipe(event_recipe: {
   return call_api(Method.DELETE, `/event/recipe`, event_recipe);
 }
 
+export async function call_event_ingredient_list(
+  event_name: string,
+): Promise<any> {
+  return call_api(Method.GET, `/event/list/${event_name}`);
+}
+
 // -------------------
 // Recipes
 // -------------------
