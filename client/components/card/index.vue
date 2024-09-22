@@ -1,6 +1,11 @@
 <template>
   <div
-    class="overflow-hidden rounded-lg shadow outline outline-secondary-200 dark:outline-secondary-700"
+    :class="[
+      'overflow-hidden rounded-lg shadow outline',
+      has_alcohol
+        ? 'outline-red-200 dark:outline-red-700'
+        : 'outline-secondary-200 dark:outline-secondary-700',
+    ]"
   >
     <ButtonMinusSmall
       v-if="!hide_button_minus"
@@ -18,6 +23,10 @@ export default defineComponent({
   emits: ['delete'],
   props: {
     hide_button_minus: {
+      type: Boolean,
+      default: false,
+    },
+    has_alcohol: {
       type: Boolean,
       default: false,
     },

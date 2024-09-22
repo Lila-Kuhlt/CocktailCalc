@@ -27,7 +27,6 @@ export function call_url(
       server: true,
       body: JSON.stringify(data),
     }).catch((e) => {
-      alert('Etwas ist schief gelaufen. Versuche es später erneut!');
       console.error(e);
       reject();
     });
@@ -123,8 +122,9 @@ export async function call_ingredient_get_many(): Promise<any> {
 export async function call_ingredient_upsert(
   name: string,
   price: number,
+  alcohol: number,
 ): Promise<any> {
-  return call_api(Method.POST, '/ingredient', { name, price });
+  return call_api(Method.POST, '/ingredient', { name, price, alcohol });
 }
 
 export async function call_ingredient_delete(name: string): Promise<any> {
