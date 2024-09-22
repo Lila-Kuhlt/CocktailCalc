@@ -30,8 +30,6 @@
             <FormInputAmount class="w-16" value="0" name="amount" required />
             <ButtonPlus class="ml-4" type="submit" title="Rezept hinzufügen" />
           </form>
-        </li>
-        <li class="mt-auto">
           <LayoutLineSeparator class="my-3" title="Zutaten" />
           <div class="flex flex-col gap-y-3">
             <div
@@ -65,10 +63,7 @@ export default defineComponent({
     });
 
     call_event_ingredient_list(props.name).then((data) => {
-      ingredients_many.value = Object.keys(data.ingredients).map((name) => ({
-        name,
-        amount: data.ingredients[name],
-      }));
+      ingredients_many.value = data.ingredients;
     });
 
     return {
@@ -145,10 +140,7 @@ export default defineComponent({
     },
     update_ingredient_list() {
       call_event_ingredient_list(this.name).then((data) => {
-        this.ingredients_many = Object.keys(data.ingredients).map((name) => ({
-          name,
-          amount: data.ingredients[name],
-        }));
+        this.ingredients_many = data.ingredients;
       });
     },
   },

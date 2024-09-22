@@ -3,7 +3,7 @@
     class="text-md font-regular w-32 truncate whitespace-nowrap"
     :title="amount"
   >
-    {{ amount }} L
+    {{ amount }}&nbsp;L
   </h4>
 </template>
 
