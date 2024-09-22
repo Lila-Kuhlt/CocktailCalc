@@ -46,17 +46,19 @@ export class CalcService {
     });
   }
 
-  async addIngredient(name: string, price: number) {
+  async addIngredient(name: string, price: number, alcohol: boolean) {
     const ingredient = await this.prisma.ingredient.upsert({
       where: {
         name: name,
       },
       update: {
         price: price,
+        alcohol: alcohol,
       },
       create: {
         name: name,
         price: price,
+        alcohol: alcohol,
       },
       include: {
         IngredientAmount: true,
@@ -361,8 +363,12 @@ export class CalcService {
       },
     });
     let price = 0.0;
+    let alcohol = false;
     for (const component of recipe?.ingredients ?? []) {
       price += component.amount * component.ingredient.price;
+      if (component.ingredient.alcohol) {
+        alcohol = true;
+      }
     }
     // prices are in €/l, but ingredient amounts are in cl
     await this.prisma.recipe.update({
@@ -371,6 +377,7 @@ export class CalcService {
       },
       data: {
         price: price / 100,
+        alcohol: alcohol,
       },
     });
 
