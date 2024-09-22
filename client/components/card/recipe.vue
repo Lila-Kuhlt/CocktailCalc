@@ -4,7 +4,7 @@
       <CardTitle :title="`${name} (${price.toFixed(2)}€)`" />
       <ul class="mt-2 flex w-full flex-grow flex-col justify-between gap-y-1">
         <li v-for="ingredient in ingredients" :key="ingredient.name">
-          <form class="flex items-center gap-x-3">
+          <form @submit.prevent="" class="flex items-center gap-x-3">
             <LayoutItemTitle :title="ingredient.name" />
             <FormInputCl
               class="w-16"

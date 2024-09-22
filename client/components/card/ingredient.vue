@@ -2,7 +2,7 @@
   <Card @delete="delete_ingredient" :has_alcohol="alcohol">
     <div class="flex items-center justify-between gap-x-2">
       <CardTitle :title="name" />
-      <form ref="form" class="ml-auto">
+      <form @submit.prevent="" ref="form" class="ml-auto">
         <FormInputPricePerL
           class="text-right"
           @focusout="update_price"

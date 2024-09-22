@@ -1,6 +1,7 @@
 <template>
   <div class="flex items-center gap-x-2">
     <FormInput
+      class="w-24"
       v-bind="$attrs"
       type="number"
       step="0.01"
