@@ -15,6 +15,8 @@
         :key="recipe.name"
         :name="recipe.name"
         :ingredients="recipe.ingredients"
+        :price="recipe.price"
+        @update_price="update_price"
         @delete_recipe="delete_recipe"
         @upsert_recipe_ingredient="upsert_recipe_ingredient"
         @delete_recipe_ingredient="delete_recipe_ingredient"
@@ -24,12 +26,18 @@
 </template>
 
 <script lang="ts">
+type Recipe = {
+  name: string;
+  price: number;
+  ingredients: Array<{
+    name: string;
+    amount: number;
+  }>;
+};
+
 export default defineComponent({
   setup() {
-    const recipes: Array<{
-      name: string;
-      ingredients: [name: string, amount: number];
-    }> = ref([]);
+    const recipes: Array<Recipe> = ref([]);
 
     call_recipe_get_many().then((data) => {
       recipes.value = data;
@@ -40,6 +48,12 @@ export default defineComponent({
     };
   },
   methods: {
+    async update_price(name: string, price: number) {
+      const recipe = this.find_recipe(name);
+      if (recipe) {
+        recipe.price = price;
+      }
+    },
     add_receipt(e: Event) {
       const form = e.target as HTMLFormElement;
       const form_data = new FormData(form);

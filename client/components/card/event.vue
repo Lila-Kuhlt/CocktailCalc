@@ -1,7 +1,7 @@
 <template>
   <Card @delete="delete_event">
     <div class="flex h-full flex-col items-center justify-between gap-y-2">
-      <CardTitle :title="name" />
+      <CardTitle :title="`${name} (${price.toFixed(2)}€)`" />
       <ul class="mt-2 flex w-full flex-grow flex-col justify-between gap-y-1">
         <li v-for="recipe in recipes" :key="recipe.name">
           <form class="flex items-center gap-x-3">
@@ -25,16 +25,26 @@
         </li>
         <li class="mt-auto">
           <LayoutLineSeparator class="my-3" title="Rezept hinzufügen" />
-          <div>
-            <form @submit.prevent="add_recipe" class="flex gap-x-3">
-              <SelectItems :options="recipes_many" name="recipe"></SelectItems>
-              <FormInputAmount class="w-16" value="0" name="amount" required />
-              <ButtonPlus
-                class="ml-4"
-                type="submit"
-                title="Rezept hinzufügen"
+          <form @submit.prevent="add_recipe" class="flex gap-x-3">
+            <SelectItems :options="recipes_many" name="recipe"></SelectItems>
+            <FormInputAmount class="w-16" value="0" name="amount" required />
+            <ButtonPlus class="ml-4" type="submit" title="Rezept hinzufügen" />
+          </form>
+        </li>
+        <li class="mt-auto">
+          <LayoutLineSeparator class="my-3" title="Zutaten" />
+          <div class="flex flex-col gap-y-3">
+            <div
+              v-for="ingredient in ingredients_many"
+              :key="ingredient.name"
+              class="flex items-center justify-between"
+            >
+              <LayoutItemTitle :title="ingredient.name" />
+              <LayoutItemAmount
+                class="ml-auto text-right"
+                :amount="ingredient.amount"
               />
-            </form>
+            </div>
           </div>
         </li>
       </ul>
@@ -43,22 +53,42 @@
 </template>
 
 <script lang="ts">
+import { call_event_ingredient_list } from '~/utils/api';
+
 export default defineComponent({
-  setup() {
+  setup(props) {
     const recipes_many: Array<string> = ref([]);
+    const ingredients_many: Array<{ name: string; amount: int }> = ref([]);
 
     call_recipe_get_many().then((data) => {
       recipes_many.value = data.map((recipe) => recipe.name);
     });
 
+    call_event_ingredient_list(props.name).then((data) => {
+      ingredients_many.value = Object.keys(data.ingredients).map((name) => ({
+        name,
+        amount: data.ingredients[name],
+      }));
+    });
+
     return {
       recipes_many,
+      ingredients_many,
     };
   },
-  emits: ['delete_event', 'upsert_event_recipe', 'delete_event_recipe'],
+  emits: [
+    'update_price',
+    'delete_event',
+    'upsert_event_recipe',
+    'delete_event_recipe',
+  ],
   props: {
     name: {
       type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
       required: true,
     },
     recipes: {
@@ -84,8 +114,10 @@ export default defineComponent({
         amount: recipe_amount,
       };
 
-      call_event_upsert_recipe(upsert_recipe).then(() => {
+      call_event_upsert_recipe(upsert_recipe).then((event) => {
         this.$emit('upsert_event_recipe', upsert_recipe);
+        this.$emit('update_price', this.name, event.price);
+        this.update_ingredient_list();
       });
     },
     upsert_recipe(name: string, amount: number) {
@@ -94,8 +126,10 @@ export default defineComponent({
         recipe: name,
         amount: amount,
       };
-      call_event_upsert_recipe(upsert_recipe).then(() => {
+      call_event_upsert_recipe(upsert_recipe).then((event) => {
         this.$emit('upsert_event_recipe', upsert_recipe);
+        this.$emit('update_price', this.name, event.price);
+        this.update_ingredient_list();
       });
     },
     delete_recipe(recipe_name: string) {
@@ -103,8 +137,18 @@ export default defineComponent({
         event: this.name,
         recipe: recipe_name,
       };
-      call_event_delete_recipe(delete_recipe).then(() => {
+      call_event_delete_recipe(delete_recipe).then((event) => {
         this.$emit('delete_event_recipe', delete_recipe);
+        this.$emit('update_price', this.name, event.price);
+        this.update_ingredient_list();
+      });
+    },
+    update_ingredient_list() {
+      call_event_ingredient_list(this.name).then((data) => {
+        this.ingredients_many = Object.keys(data.ingredients).map((name) => ({
+          name,
+          amount: data.ingredients[name],
+        }));
       });
     },
   },

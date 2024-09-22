@@ -11,13 +11,14 @@ datasource db {
 }
 
 model Event {
-  name String @unique
+  name  String @unique
+  price Float
 
   recipes RecipeAmount[]
 }
 
 model RecipeAmount {
-  amount    Float
+  amount    Int
   eventName String
   name      String @map("recipeName")
 
@@ -30,13 +31,14 @@ model RecipeAmount {
 model Recipe {
   name        String  @unique
   description String?
+  price       Float
 
   ingredients  IngredientAmount[]
   RecipeAmount RecipeAmount[]
 }
 
 model IngredientAmount {
-  amount     Float
+  amount     Int
   recipeName String
   name       String @map("ingredientName")
 

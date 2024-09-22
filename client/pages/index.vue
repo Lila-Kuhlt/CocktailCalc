@@ -14,7 +14,9 @@
         v-for="event in events"
         :key="event.name"
         :name="event.name"
+        :price="event.price"
         :recipes="event.recipes"
+        @update_price="update_price"
         @delete_event="delete_event"
         @upsert_event_recipe="upsert_event_recipe"
         @delete_event_recipe="delete_event_recipe"
@@ -24,12 +26,18 @@
 </template>
 
 <script lang="ts">
+type Event = {
+  name: string;
+  price: number;
+  recipes: Array<{
+    name: string;
+    amount: number;
+  }>;
+};
+
 export default defineComponent({
   setup() {
-    const events: Array<{
-      name: string;
-      recipes: [{ name: string; amount: number }];
-    }> = ref([]);
+    const events: Array<Event> = ref([]);
 
     call_event_get_many().then((data) => {
       events.value = data;
@@ -40,6 +48,12 @@ export default defineComponent({
     };
   },
   methods: {
+    async update_price(name: string, price: string) {
+      const event = this.find_event(name);
+      if (event) {
+        event.price = price;
+      }
+    },
     add_event(e: Event) {
       const form = e.target as HTMLFormElement;
       const form_data = new FormData(form);

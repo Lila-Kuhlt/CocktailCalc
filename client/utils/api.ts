@@ -46,6 +46,10 @@ export async function call_event_get_many(): Promise<any> {
   return call_api(Method.GET, '/events');
 }
 
+export async function call_event_find(name: string): Promise<any> {
+  return call_api(Method.GET, `/events/${name}`);
+}
+
 export async function call_event_upsert(name: string): Promise<any> {
   return call_api(Method.POST, '/event', { name });
 }
@@ -69,11 +73,21 @@ export async function call_event_delete_recipe(event_recipe: {
   return call_api(Method.DELETE, `/event/recipe`, event_recipe);
 }
 
+export async function call_event_ingredient_list(
+  event_name: string,
+): Promise<any> {
+  return call_api(Method.GET, `/event/list/${event_name}`);
+}
+
 // -------------------
 // Recipes
 // -------------------
 export async function call_recipe_get_many(): Promise<any> {
   return call_api(Method.GET, '/recipes');
+}
+
+export async function call_recipe_find(name: string): Promise<any> {
+  return call_api(Method.GET, `/recipes/${name}`);
 }
 
 export async function call_recipe_upsert(name: string): Promise<any> {

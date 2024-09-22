@@ -1,7 +1,7 @@
 <template>
   <Card @delete="delete_recipe">
     <div class="flex h-full flex-col items-center justify-between gap-y-2">
-      <CardTitle :title="name" />
+      <CardTitle :title="`${name} (${price.toFixed(2)}€)`" />
       <ul class="mt-2 flex w-full flex-grow flex-col justify-between gap-y-1">
         <li v-for="ingredient in ingredients" :key="ingredient.name">
           <form class="flex items-center gap-x-3">
@@ -30,7 +30,7 @@
               :options="ingredients_many"
               name="ingredient"
             ></SelectItems>
-            <FormInputAmount class="w-16" value="0" name="amount" required />
+            <FormInputCl class="w-16" value="0" name="amount" required />
             <ButtonPlus class="ml-4" type="submit" title="Zutat hinzufügen" />
           </form>
         </li>
@@ -53,6 +53,7 @@ export default defineComponent({
     };
   },
   emits: [
+    'update_price',
     'delete_recipe',
     'upsert_recipe_ingredient',
     'delete_recipe_ingredient',
@@ -60,6 +61,10 @@ export default defineComponent({
   props: {
     name: {
       type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
       required: true,
     },
     ingredients: {
@@ -85,8 +90,9 @@ export default defineComponent({
         amount: ingredient_amount,
       };
 
-      call_recipe_upsert_ingredient(upsert_ingredient).then(() => {
+      call_recipe_upsert_ingredient(upsert_ingredient).then((recipe) => {
         this.$emit('upsert_recipe_ingredient', upsert_ingredient);
+        this.$emit('update_price', this.name, recipe.price);
       });
     },
     upsert_ingredient(name: string, amount: number) {
@@ -95,8 +101,9 @@ export default defineComponent({
         ingredient: name,
         amount: amount,
       };
-      call_recipe_upsert_ingredient(upsert_ingredient).then(() => {
+      call_recipe_upsert_ingredient(upsert_ingredient).then((recipe) => {
         this.$emit('upsert_recipe_ingredient', upsert_ingredient);
+        this.$emit('update_price', this.name, recipe.price);
       });
     },
     delete_ingredient(recipe_name: string, ingredient_name: string) {
@@ -104,8 +111,9 @@ export default defineComponent({
         recipe: recipe_name,
         ingredient: ingredient_name,
       };
-      call_recipe_delete_ingredient(ingredient).then(() => {
+      call_recipe_delete_ingredient(ingredient).then((recipe) => {
         this.$emit('delete_recipe_ingredient', ingredient);
+        this.$emit('update_price', this.name, recipe.price);
       });
     },
   },
