@@ -1,7 +1,7 @@
 <template>
   <Card @delete="delete_event">
     <div class="flex h-full flex-col items-center justify-between gap-y-2">
-      <CardTitle :title="name" />
+      <CardTitle :title="`${name} (${price.toFixed(2)}€)`" />
       <ul class="mt-2 flex w-full flex-grow flex-col justify-between gap-y-1">
         <li v-for="recipe in recipes" :key="recipe.name">
           <form class="flex items-center gap-x-3">
@@ -55,10 +55,19 @@ export default defineComponent({
       recipes_many,
     };
   },
-  emits: ['delete_event', 'upsert_event_recipe', 'delete_event_recipe'],
+  emits: [
+    'update_price',
+    'delete_event',
+    'upsert_event_recipe',
+    'delete_event_recipe',
+  ],
   props: {
     name: {
       type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
       required: true,
     },
     recipes: {
@@ -84,8 +93,9 @@ export default defineComponent({
         amount: recipe_amount,
       };
 
-      call_event_upsert_recipe(upsert_recipe).then(() => {
+      call_event_upsert_recipe(upsert_recipe).then((event) => {
         this.$emit('upsert_event_recipe', upsert_recipe);
+        this.$emit('update_price', this.name, event.price);
       });
     },
     upsert_recipe(name: string, amount: number) {
@@ -94,8 +104,9 @@ export default defineComponent({
         recipe: name,
         amount: amount,
       };
-      call_event_upsert_recipe(upsert_recipe).then(() => {
+      call_event_upsert_recipe(upsert_recipe).then((event) => {
         this.$emit('upsert_event_recipe', upsert_recipe);
+        this.$emit('update_price', this.name, event.price);
       });
     },
     delete_recipe(recipe_name: string) {
@@ -103,8 +114,9 @@ export default defineComponent({
         event: this.name,
         recipe: recipe_name,
       };
-      call_event_delete_recipe(delete_recipe).then(() => {
+      call_event_delete_recipe(delete_recipe).then((event) => {
         this.$emit('delete_event_recipe', delete_recipe);
+        this.$emit('update_price', this.name, event.price);
       });
     },
   },

@@ -4,8 +4,12 @@ import {
   EventWithRecipes,
   RecipeWithIngredients,
 } from '@/controller/calc.service';
-import { ApiOperation, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Ingredient, Recipe } from '@prisma/client';
+import {
+  ApiOperation,
+  ApiProperty,
+  ApiPropertyOptional,
+} from '@nestjs/swagger';
+import { Ingredient } from '@prisma/client';
 
 class NameDto {
   @ApiProperty()
@@ -96,15 +100,25 @@ export class CalcController {
     return this.appService.getRecipes();
   }
 
+  @Get('recipes/:name')
+  @ApiOperation({ summary: 'get specific recipe' })
+  async findRecipe(
+    @Param('name') name: string,
+  ): Promise<RecipeWithIngredients> {
+    return this.appService.findRecipe(name);
+  }
+
   @Post('recipe')
   @ApiOperation({ summary: 'add or update recipe' })
   async addRecipe(@Body() data: RecipeDto): Promise<RecipeWithIngredients> {
-    return this.appService.addRecipe(data.name, data.description ?? "");
+    return this.appService.addRecipe(data.name, data.description ?? '');
   }
 
   @Post('recipe/ingredient')
   @ApiOperation({ summary: 'add ingredient to recipe' })
-  async addRecipeIngredient(@Body() data: RecipeIngredientDto): Promise<RecipeWithIngredients> {
+  async addRecipeIngredient(
+    @Body() data: RecipeIngredientDto,
+  ): Promise<RecipeWithIngredients> {
     return this.appService.addIngredientAmount(
       data.recipe,
       data.ingredient,
@@ -120,7 +134,9 @@ export class CalcController {
 
   @Delete('recipe/ingredient')
   @ApiOperation({ summary: 'delete ingredient from recipe' })
-  async deleteRecipeIngredient(@Body() data: DeleteRecipeIngredientDto): Promise<RecipeWithIngredients> {
+  async deleteRecipeIngredient(
+    @Body() data: DeleteRecipeIngredientDto,
+  ): Promise<RecipeWithIngredients> {
     return this.appService.deleteRecipeIngredient(data.recipe, data.ingredient);
   }
 
@@ -132,6 +148,12 @@ export class CalcController {
     return this.appService.getEvents();
   }
 
+  @Get('events/:name')
+  @ApiOperation({ summary: 'get specific event' })
+  async findEvent(@Param('name') name: string): Promise<EventWithRecipes> {
+    return this.appService.findEvent(name);
+  }
+
   @Post('event')
   @ApiOperation({ summary: 'add or update event' })
   async addEvent(@Body() data: NameDto): Promise<EventWithRecipes> {
@@ -140,7 +162,9 @@ export class CalcController {
 
   @Post('event/recipe')
   @ApiOperation({ summary: 'add recipe to event' })
-  async addEventRecipe(@Body() data: EventRecipeDto): Promise<EventWithRecipes> {
+  async addEventRecipe(
+    @Body() data: EventRecipeDto,
+  ): Promise<EventWithRecipes> {
     return this.appService.addEventRecipe(data.event, data.recipe, data.amount);
   }
 
@@ -152,14 +176,21 @@ export class CalcController {
 
   @Delete('event/recipe')
   @ApiOperation({ summary: 'delete recipe from event' })
-  async deleteEventRecipe(@Body() data: DeleteEventRecipeDto): Promise<EventWithRecipes> {
+  async deleteEventRecipe(
+    @Body() data: DeleteEventRecipeDto,
+  ): Promise<EventWithRecipes> {
     return this.appService.deleteEventRecipe(data.event, data.recipe);
   }
 
-  @Get('event/list')
+  @Get('event/list/:name')
   @ApiOperation({ summary: 'buying list for event' })
-  async getEventList(@Param("name") name: string): Promise<{ ingredients: Object, price: number }> {
+  async getEventList(
+    @Param('name') name: string,
+  ): Promise<{ ingredients: Object; price: number }> {
     const list = await this.appService.getEventList(name);
-    return { ingredients: Object.fromEntries(list.ingredients), price: list.price };
+    return {
+      ingredients: Object.fromEntries(list.ingredients),
+      price: list.price,
+    };
   }
 }
