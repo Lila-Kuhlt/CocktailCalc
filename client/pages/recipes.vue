@@ -61,7 +61,7 @@ export default defineComponent({
       call_recipe_upsert(recipe_name).then(() => {
         const recipe = this.find_recipe(recipe_name);
         if (!recipe) {
-          this.recipes.push({ name: recipe_name, ingredients: [] });
+          this.recipes.push({ name: recipe_name, price: 0.0, ingredients: [] });
         }
         this.$refs.add_receipt_toggle.hide();
       });
