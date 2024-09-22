@@ -2,9 +2,9 @@
   <Card @delete="delete_ingredient">
     <div class="flex items-center justify-between gap-x-2">
       <CardTitle :title="name" />
-      <form ref="form" class="mr-3">
-        <FormInputPrice
-          class="w-24 text-right"
+      <form ref="form" class="ml-auto">
+        <FormInputPricePerL
+          class="text-right"
           @focusout="update_price"
           :value="price.toFixed(2)"
         />
