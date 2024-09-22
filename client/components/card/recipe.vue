@@ -1,5 +1,5 @@
 <template>
-  <Card @delete="delete_recipe">
+  <Card @delete="delete_recipe" :has_alcohol="alcohol">
     <div class="flex h-full flex-col items-center justify-between gap-y-2">
       <CardTitle :title="`${name} (${price.toFixed(2)}€)`" />
       <ul class="mt-2 flex w-full flex-grow flex-col justify-between gap-y-1">
@@ -68,6 +68,7 @@ export default defineComponent({
     },
   },
   emits: [
+    'update_alcohol',
     'update_price',
     'delete_recipe',
     'upsert_recipe_ingredient',
@@ -84,6 +85,10 @@ export default defineComponent({
     },
     ingredients: {
       type: Array<{ name: string; amount: number }>,
+      required: true,
+    },
+    alcohol: {
+      type: Boolean,
       required: true,
     },
   },
@@ -108,6 +113,7 @@ export default defineComponent({
       call_recipe_upsert_ingredient(upsert_ingredient).then((recipe) => {
         this.$emit('upsert_recipe_ingredient', upsert_ingredient);
         this.$emit('update_price', this.name, recipe.price);
+        this.$emit('update_alcohol', this.name, recipe.alcohol);
       });
     },
     upsert_ingredient(name: string, amount: number) {
@@ -129,6 +135,7 @@ export default defineComponent({
       call_recipe_delete_ingredient(ingredient).then((recipe) => {
         this.$emit('delete_recipe_ingredient', ingredient);
         this.$emit('update_price', this.name, recipe.price);
+        this.$emit('update_alcohol', this.name, recipe.alcohol);
       });
     },
   },

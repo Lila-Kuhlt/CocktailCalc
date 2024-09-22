@@ -22,6 +22,8 @@ class IngredientDto {
   name!: string;
   @ApiProperty()
   price!: number;
+  @ApiPropertyOptional()
+  alcohol?: boolean;
 }
 
 class RecipeDto {
@@ -84,7 +86,7 @@ export class CalcController {
   @Post('ingredient')
   @ApiOperation({ summary: 'add or update ingredient' })
   async addIngredient(@Body() data: IngredientDto) {
-    await this.appService.addIngredient(data.name, data.price);
+    await this.appService.addIngredient(data.name, data.price, data.alcohol ?? false);
   }
 
   @Delete('ingredient')

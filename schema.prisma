@@ -32,13 +32,14 @@ model Recipe {
   name        String  @unique
   description String?
   price       Float
+  alcohol     Boolean @default(false)
 
   ingredients  IngredientAmount[]
   RecipeAmount RecipeAmount[]
 }
 
 model IngredientAmount {
-  amount     Int
+  amount     Float
   recipeName String
   name       String @map("ingredientName")
 
@@ -49,8 +50,9 @@ model IngredientAmount {
 }
 
 model Ingredient {
-  name  String @unique
-  price Float
+  name    String  @unique
+  price   Float
+  alcohol Boolean @default(false)
 
   IngredientAmount IngredientAmount[]
 }

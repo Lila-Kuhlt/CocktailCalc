@@ -17,7 +17,9 @@
         :key="ingredient.name"
         :name="ingredient.name"
         :price="ingredient.price"
-        @update="update_ingredient"
+        :alcohol="ingredient.alcohol"
+        @update_price="update_price"
+        @update_alcohol="update_alcohol"
         @delete="delete_ingredient"
       />
     </LayoutGrid>
@@ -25,9 +27,11 @@
 </template>
 
 <script lang="ts">
+type Ingredient = { name: string; price: number; alcohol: boolean };
+
 export default defineComponent({
   setup() {
-    const ingredients: Array<{ name: string; price: string }> = ref([]);
+    const ingredients: Array<Ingredient> = ref([]);
 
     call_ingredient_get_many().then((data) => {
       ingredients.value = data;
@@ -53,10 +57,15 @@ export default defineComponent({
       if (ingredient) ingredient.price = price;
       else this.ingredients.push({ name, price });
     },
-    update_ingredient(name: string, price: number) {
+    update_price(name: string, price: number) {
       const ingredient = this.find_ingredient(name);
       if (!ingredient) return;
       ingredient.price = price;
+    },
+    update_alcohol(name: string, alcohol: boolean) {
+      const ingredient = this.find_ingredient(name);
+      if (!ingredient) return;
+      ingredient.alcohol = alcohol;
     },
     delete_ingredient(name: string) {
       this.ingredients = this.ingredients.filter((i) => i.name !== name);

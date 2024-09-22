@@ -14,8 +14,10 @@
         v-for="recipe in recipes"
         :key="recipe.name"
         :name="recipe.name"
-        :ingredients="recipe.ingredients"
         :price="recipe.price"
+        :alcohol="recipe.alcohol"
+        :ingredients="recipe.ingredients"
+        @update_alcohol="update_alcohol"
         @update_price="update_price"
         @delete_recipe="delete_recipe"
         @upsert_recipe_ingredient="upsert_recipe_ingredient"
@@ -29,6 +31,7 @@
 type Recipe = {
   name: string;
   price: number;
+  alcohol: boolean;
   ingredients: Array<{
     name: string;
     amount: number;
@@ -53,6 +56,11 @@ export default defineComponent({
       if (recipe) {
         recipe.price = price;
       }
+    },
+    update_alcohol(name: string, alcohol: boolean) {
+      const recipe = this.find_recipe(name);
+      if (!recipe) return;
+      recipe.alcohol = alcohol;
     },
     add_receipt(e: Event) {
       const form = e.target as HTMLFormElement;
