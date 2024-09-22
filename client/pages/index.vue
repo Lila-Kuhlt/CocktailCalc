@@ -61,7 +61,7 @@ export default defineComponent({
       call_event_upsert(event_name).then(() => {
         const event = this.find_event(event_name);
         if (!event) {
-          this.events.push({ name: event_name, recipes: [] });
+          this.events.push({ name: event_name, price: 0.0, recipes: [] });
         }
         this.$refs.add_event_toggle.hide();
       });
